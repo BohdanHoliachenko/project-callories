@@ -1717,6 +1717,56 @@
     cursor: pointer;
   }
   .logout-btn:hover { border-color: var(--warn); }
+  .sheets-sync {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+  }
+  .sheets-sync-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .sheets-sync-caption {
+    margin-top: 3px;
+    color: var(--ink-soft);
+    font-size: 11.5px;
+    line-height: 1.4;
+  }
+  .sheets-sync-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .sheets-sync-row input {
+    flex: 1;
+    min-width: 0;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 12px;
+    background: var(--bg);
+    color: var(--ink);
+    font: 13px 'Inter', sans-serif;
+  }
+  .sheets-sync-row input:focus { outline: none; border-color: var(--accent); }
+  .sheets-sync-btn {
+    flex: none;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 14px;
+    background: var(--surface);
+    color: var(--ink);
+    font: 500 12.5px 'Inter', sans-serif;
+    cursor: pointer;
+  }
+  .sheets-sync-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .sheets-sync-status {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .sheets-sync-status.is-success { color: var(--accent); }
+  .sheets-sync-status.is-error { color: var(--warn); }
 
   /* auth screen */
   .auth-screen {
@@ -2482,6 +2532,15 @@
           </div>
           <button class="profile-save" id="profileSaveBtn" type="submit" data-i18n="saveProfile">Зберегти профіль</button>
         </form>
+        <div class="sheets-sync">
+          <div class="sheets-sync-title" data-i18n="sheetsSyncTitle">Синхронізація з Google Таблицею</div>
+          <div class="sheets-sync-caption" data-i18n="sheetsSyncCaption">Вкажи URL розгорнутого Apps Script, щоб зберігати копію даних (харчування, тренування, профіль) у Google Таблиці. Фото не синхронізуються.</div>
+          <div class="sheets-sync-row">
+            <input id="sheetsUrlInput" type="url" data-i18n-placeholder="sheetsUrlPlaceholder" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off" spellcheck="false">
+            <button type="button" class="sheets-sync-btn" id="sheetsSyncNowBtn" data-i18n="syncNow">Синхронізувати</button>
+          </div>
+          <div class="sheets-sync-status" id="sheetsSyncStatus"></div>
+        </div>
       </section>
     </section>
 
@@ -2648,7 +2707,7 @@
   const STORAGE_KEY = 'calorie-tracker-v2';
   const translations = {
     uk: {
-      languageLabel: 'Мова', openSelect: 'Відкрити список', photoLabel: 'Додати фото', avatarLabel: 'Додати фото аватара', profile: 'Профіль', profileCaption: 'Твої особисті дані та показники', darkTheme: 'Темна тема', nameLabel: 'Ім’я', namePlaceholder: 'Наприклад, Олена', ageLabel: 'Вік', agePlaceholder: 'Років', heightLabel: 'Зріст, см', heightPlaceholder: 'Наприклад, 170', weightLabel: 'Вага, кг', weightPlaceholder: 'Наприклад, 70', bmiLabel: 'ІМТ', bmiCategoryLabel: 'Категорія ваги', bmiAdviceLabel: 'Орієнтовна оцінка за ІМТ', bmiUnderweight: 'Недостатня вага', bmiNormal: 'Норма', bmiOverweight: 'Надлишкова вага', bmiObesity1: 'Ожиріння I ст.', bmiObesity2: 'Ожиріння II ст.', bmiObesity3: 'Ожиріння III ст.', bmiNoData: 'Вкажи зріст і вагу', saveProfile: 'Зберегти профіль', profileSaved: 'Профіль збережено', editField: 'Редагувати', periodFilter: 'Період', categoryFilter: 'Категорія', periodToday: 'Сьогодні', periodWeek: 'Останні 7 днів', allCategories: 'Усі категорії', dashboard: 'Дашборд', dashboardToday: 'Дані за сьогодні', dashboardWeek: 'Дані за останні 7 днів', nutritionChart: 'Калорії за період', unit: 'ккал', currentUser: 'Ти', olena: 'Олена', andrii: 'Андрій', sofia: 'Софія', nutrition: 'Харчування', last7Nutrition: 'за останні 7 днів', weeklyKcal: 'всього ккал', mealCount: 'прийомів їжі', favoriteMeal: 'найчастіше', categoryBreakdown: 'Розподіл за категоріями', noCategoryData: 'Немає даних за цей період', factsTitle: '10 фактів про харчування', faqTitle: 'Часті запитання', faqQ1: 'Де зберігаються мої дані?', faqA1: 'Усі записи харчування, тренувань і профіль зберігаються локально в браузері й прив’язані до твого акаунта — без зовнішніх серверів.', faqQ2: 'Чи синхронізуються дані між пристроями?', faqA2: "Ні, акаунти та дані прив'язані до цього браузера на цьому пристрої. Якщо очистити кеш або відкрити застосунок на іншому пристрої, доведеться зареєструватися знову і історія буде порожньою.", faqQ3: 'Як змінити денну ціль калорій?', faqA3: 'На вкладці «Харчування» натисни на значення цілі поруч із написом «ціль» і введи нове число — воно збережеться автоматично.', faqQ4: 'Як рахується ІМТ?', faqA4: 'Індекс маси тіла — це вага в кілограмах, поділена на зріст у метрах у квадраті. Вкажи зріст і вагу в профілі, щоб побачити результат.', faqQ5: 'Чи можна додати фото до страви або аватара?', faqA5: 'Так, натисни на іконку камери біля форми додавання їжі або на аватар у профілі, щоб завантажити фото з пристрою.', faqQ6: 'Як перемкнути мову чи темну тему?', faqA6: 'І мова, і темна тема перемикаються прямо в шапці застосунку — прапорцем і кнопкою з місяцем/сонцем поруч із ним.', training: 'Тренування', trainingCaption: 'Плануй активність на тиждень', trainingType: 'Тип тренування', unitLabel: 'Одиниця', quantity: 'Кількість', daysLabel: 'Дні', exercisesPlaceholder: 'Вправи: присідання, планка, віджимання...', notesPlaceholder: "Нотатка (необов'язково)", addTraining: 'Додати тренування', strength: 'Силове', cardio: 'Кардіо', yoga: 'Йога', stretching: 'Розтяжка', minutes: 'хв', sets: 'підх.', sessions: 'разів', mon: 'Пн', tue: 'Вт', wed: 'Ср', thu: 'Чт', fri: 'Пт', sat: 'Сб', sun: 'Нд', noTraining: 'Ще немає запланованих тренувань', exercisesLabel: 'Вправи', noteLabel: 'Нотатка', deleteTraining: 'Видалити тренування', confirmTitle: 'Змінити тип тренування?', confirmIncomplete: 'Поточне тренування ще не заповнене. Перейти до іншого типу?', confirmComplete: 'Поточне тренування заповнене. Додайте його перед переходом або продовжуйте без збереження.', confirmStay: 'Залишитися', confirmContinue: 'Так, продовжити', validation: 'Заповніть тип, виберіть хоча б один день, вкажіть кількість і додайте вправи.', noData: '—', appName: 'TrackTime', pageTitle: 'TrackTime — облік калорій', tagline: 'Контролюй своє життя', today: 'Сьогодні', week: 'Тиждень', goal: 'ціль', chatOpen: 'Чат з підтримкою', chatTitle: 'Підтримка', chatStatus: 'Зазвичай відповідаємо швидко', chatPlaceholder: 'Напиши повідомлення...', chatSend: 'Надіслати', chatWelcome: 'Доброго дня! 👋 Менеджер підтримки скоро приєднається до чату.', programsNav: 'Програми', programsTitle: 'Програми тренувань від фахівців', programsCaption: 'Кожну програму індивідуально розписує сертифікований спеціаліст під твій рівень і ціль', programStrengthName: 'Силове тренування', programStrengthDesc: 'Персональний план силових тренувань з прогресією навантаження, розписаний тренером під твої цілі та обладнання.', programCardioName: 'Кардіо', programCardioDesc: 'Програма для витривалості та схуднення, яку спеціаліст адаптує під твій поточний рівень підготовки.', programYogaName: 'Йога', programYogaDesc: 'Індивідуальна послідовність асан і дихальних практик від інструктора з урахуванням твого рівня гнучкості.', programStretchingName: 'Розтяжка', programStretchingDesc: 'План розвитку гнучкості та мобільності суглобів, складений спеціалістом персонально для тебе.', programDiscount: '−30% для нових користувачів', programBuy: 'Купити програму', programBuyToast: 'Це демо-версія 🙂 Оплата поки не підключена — скоро можна буде купити програму тут.', nutritionPlansTitle: 'Плани харчування від дієтологів', nutritionPlansCaption: 'Кожен раціон індивідуально розписує дієтолог під твою ціль, вагу та спосіб життя', planMassName: 'Набір маси', planMassDesc: 'Раціон з профіцитом калорій і балансом БЖВ, складений дієтологом для якісного набору ваги без зайвого жиру.', planLossName: 'Схуднення', planLossDesc: 'Персональний план харчування з дефіцитом калорій, який враховує твої смаки, звички та спосіб життя.', planFatlossName: 'Скидання жиру', planFatlossDesc: "Раціон для зниження відсотка жиру зі збереженням м'язової маси, розписаний фахівцем з харчування.", planMuscleName: "Набір м'язів", planMuscleDesc: 'Високобілковий раціон для росту м\'язів, складений персонально під твої тренування та ціль.',
+      languageLabel: 'Мова', openSelect: 'Відкрити список', photoLabel: 'Додати фото', avatarLabel: 'Додати фото аватара', profile: 'Профіль', profileCaption: 'Твої особисті дані та показники', darkTheme: 'Темна тема', nameLabel: 'Ім’я', namePlaceholder: 'Наприклад, Олена', ageLabel: 'Вік', agePlaceholder: 'Років', heightLabel: 'Зріст, см', heightPlaceholder: 'Наприклад, 170', weightLabel: 'Вага, кг', weightPlaceholder: 'Наприклад, 70', bmiLabel: 'ІМТ', bmiCategoryLabel: 'Категорія ваги', bmiAdviceLabel: 'Орієнтовна оцінка за ІМТ', bmiUnderweight: 'Недостатня вага', bmiNormal: 'Норма', bmiOverweight: 'Надлишкова вага', bmiObesity1: 'Ожиріння I ст.', bmiObesity2: 'Ожиріння II ст.', bmiObesity3: 'Ожиріння III ст.', bmiNoData: 'Вкажи зріст і вагу', saveProfile: 'Зберегти профіль', profileSaved: 'Профіль збережено', editField: 'Редагувати', sheetsSyncTitle: 'Синхронізація з Google Таблицею', sheetsSyncCaption: 'Вкажи URL розгорнутого Apps Script, щоб зберігати копію даних (харчування, тренування, профіль) у Google Таблиці. Фото не синхронізуються.', sheetsUrlPlaceholder: 'https://script.google.com/macros/s/.../exec', syncNow: 'Синхронізувати', syncStatusIdle: 'Ще не синхронізовано', syncStatusSyncing: 'Синхронізація…', syncStatusSuccess: 'Синхронізовано', syncStatusError: 'Помилка синхронізації — перевір URL', syncStatusNoUrl: 'Спочатку вкажи URL', periodFilter: 'Період', categoryFilter: 'Категорія', periodToday: 'Сьогодні', periodWeek: 'Останні 7 днів', allCategories: 'Усі категорії', dashboard: 'Дашборд', dashboardToday: 'Дані за сьогодні', dashboardWeek: 'Дані за останні 7 днів', nutritionChart: 'Калорії за період', unit: 'ккал', currentUser: 'Ти', olena: 'Олена', andrii: 'Андрій', sofia: 'Софія', nutrition: 'Харчування', last7Nutrition: 'за останні 7 днів', weeklyKcal: 'всього ккал', mealCount: 'прийомів їжі', favoriteMeal: 'найчастіше', categoryBreakdown: 'Розподіл за категоріями', noCategoryData: 'Немає даних за цей період', factsTitle: '10 фактів про харчування', faqTitle: 'Часті запитання', faqQ1: 'Де зберігаються мої дані?', faqA1: 'Усі записи харчування, тренувань і профіль зберігаються локально в браузері й прив’язані до твого акаунта — без зовнішніх серверів.', faqQ2: 'Чи синхронізуються дані між пристроями?', faqA2: "Ні, акаунти та дані прив'язані до цього браузера на цьому пристрої. Якщо очистити кеш або відкрити застосунок на іншому пристрої, доведеться зареєструватися знову і історія буде порожньою.", faqQ3: 'Як змінити денну ціль калорій?', faqA3: 'На вкладці «Харчування» натисни на значення цілі поруч із написом «ціль» і введи нове число — воно збережеться автоматично.', faqQ4: 'Як рахується ІМТ?', faqA4: 'Індекс маси тіла — це вага в кілограмах, поділена на зріст у метрах у квадраті. Вкажи зріст і вагу в профілі, щоб побачити результат.', faqQ5: 'Чи можна додати фото до страви або аватара?', faqA5: 'Так, натисни на іконку камери біля форми додавання їжі або на аватар у профілі, щоб завантажити фото з пристрою.', faqQ6: 'Як перемкнути мову чи темну тему?', faqA6: 'І мова, і темна тема перемикаються прямо в шапці застосунку — прапорцем і кнопкою з місяцем/сонцем поруч із ним.', training: 'Тренування', trainingCaption: 'Плануй активність на тиждень', trainingType: 'Тип тренування', unitLabel: 'Одиниця', quantity: 'Кількість', daysLabel: 'Дні', exercisesPlaceholder: 'Вправи: присідання, планка, віджимання...', notesPlaceholder: "Нотатка (необов'язково)", addTraining: 'Додати тренування', strength: 'Силове', cardio: 'Кардіо', yoga: 'Йога', stretching: 'Розтяжка', minutes: 'хв', sets: 'підх.', sessions: 'разів', mon: 'Пн', tue: 'Вт', wed: 'Ср', thu: 'Чт', fri: 'Пт', sat: 'Сб', sun: 'Нд', noTraining: 'Ще немає запланованих тренувань', exercisesLabel: 'Вправи', noteLabel: 'Нотатка', deleteTraining: 'Видалити тренування', confirmTitle: 'Змінити тип тренування?', confirmIncomplete: 'Поточне тренування ще не заповнене. Перейти до іншого типу?', confirmComplete: 'Поточне тренування заповнене. Додайте його перед переходом або продовжуйте без збереження.', confirmStay: 'Залишитися', confirmContinue: 'Так, продовжити', validation: 'Заповніть тип, виберіть хоча б один день, вкажіть кількість і додайте вправи.', noData: '—', appName: 'TrackTime', pageTitle: 'TrackTime — облік калорій', tagline: 'Контролюй своє життя', today: 'Сьогодні', week: 'Тиждень', goal: 'ціль', chatOpen: 'Чат з підтримкою', chatTitle: 'Підтримка', chatStatus: 'Зазвичай відповідаємо швидко', chatPlaceholder: 'Напиши повідомлення...', chatSend: 'Надіслати', chatWelcome: 'Доброго дня! 👋 Менеджер підтримки скоро приєднається до чату.', programsNav: 'Програми', programsTitle: 'Програми тренувань від фахівців', programsCaption: 'Кожну програму індивідуально розписує сертифікований спеціаліст під твій рівень і ціль', programStrengthName: 'Силове тренування', programStrengthDesc: 'Персональний план силових тренувань з прогресією навантаження, розписаний тренером під твої цілі та обладнання.', programCardioName: 'Кардіо', programCardioDesc: 'Програма для витривалості та схуднення, яку спеціаліст адаптує під твій поточний рівень підготовки.', programYogaName: 'Йога', programYogaDesc: 'Індивідуальна послідовність асан і дихальних практик від інструктора з урахуванням твого рівня гнучкості.', programStretchingName: 'Розтяжка', programStretchingDesc: 'План розвитку гнучкості та мобільності суглобів, складений спеціалістом персонально для тебе.', programDiscount: '−30% для нових користувачів', programBuy: 'Купити програму', programBuyToast: 'Це демо-версія 🙂 Оплата поки не підключена — скоро можна буде купити програму тут.', nutritionPlansTitle: 'Плани харчування від дієтологів', nutritionPlansCaption: 'Кожен раціон індивідуально розписує дієтолог під твою ціль, вагу та спосіб життя', planMassName: 'Набір маси', planMassDesc: 'Раціон з профіцитом калорій і балансом БЖВ, складений дієтологом для якісного набору ваги без зайвого жиру.', planLossName: 'Схуднення', planLossDesc: 'Персональний план харчування з дефіцитом калорій, який враховує твої смаки, звички та спосіб життя.', planFatlossName: 'Скидання жиру', planFatlossDesc: "Раціон для зниження відсотка жиру зі збереженням м'язової маси, розписаний фахівцем з харчування.", planMuscleName: "Набір м'язів", planMuscleDesc: 'Високобілковий раціон для росту м\'язів, складений персонально під твої тренування та ціль.',
       foodPlaceholder: "Що з'їли?", chooseDish: 'Оберіть...', categoryLabel: 'Категорія прийому їжі', breakfast: 'Сніданок',
       lunch: 'Обід', dinner: 'Вечеря', snack: 'Перекус', record: 'Записати', todayEntries: 'Сьогоднішні записи',
       resetToday: 'Скинути сьогоднішній день', leaderboard: 'Лідерборд', thisWeek: 'цього тижня',
@@ -2660,7 +2719,7 @@
       loginTab: 'Вхід', registerTab: 'Реєстрація', emailLabel: 'Email', emailPlaceholder: 'you@example.com', passwordLabel: 'Пароль', confirmPasswordLabel: 'Підтвердження пароля', loginSubmit: 'Увійти', registerSubmit: 'Зареєструватися', logoutBtn: 'Вийти', loggedOut: 'Ти вийшов з акаунта', registerSuccess: 'Акаунт створено', nameRequiredError: "Вкажи ім'я (мінімум 2 символи)", emailRequiredError: 'Вкажи email', emailInvalidError: 'Введи коректний email', emailTakenError: 'Акаунт з таким email вже існує', passwordRequiredError: 'Вкажи пароль', passwordShortError: 'Пароль має містити щонайменше 6 символів', confirmRequiredError: 'Підтверди пароль', confirmMismatchError: 'Паролі не збігаються', loginInvalidError: 'Невірний email або пароль', splashStart: 'TrackTime — почати', splashBack: 'TrackTime — подвійний клік, щоб повернутися на початок'
     },
     en: {
-      languageLabel: 'Language', openSelect: 'Open list', photoLabel: 'Add photo', avatarLabel: 'Add avatar photo', profile: 'Profile', profileCaption: 'Your personal details and metrics', darkTheme: 'Dark theme', nameLabel: 'Name', namePlaceholder: 'For example, Olena', ageLabel: 'Age', agePlaceholder: 'Years', heightLabel: 'Height, cm', heightPlaceholder: 'For example, 170', weightLabel: 'Weight, kg', weightPlaceholder: 'For example, 70', bmiLabel: 'BMI', bmiCategoryLabel: 'Weight category', bmiAdviceLabel: 'Estimated BMI assessment', bmiUnderweight: 'Underweight', bmiNormal: 'Normal range', bmiOverweight: 'Overweight', bmiObesity1: 'Obesity class I', bmiObesity2: 'Obesity class II', bmiObesity3: 'Obesity class III', bmiNoData: 'Enter height and weight', saveProfile: 'Save profile', profileSaved: 'Profile saved', editField: 'Edit', periodFilter: 'Period', categoryFilter: 'Category', periodToday: 'Today', periodWeek: 'Last 7 days', allCategories: 'All categories', dashboard: 'Dashboard', dashboardToday: 'Data for today', dashboardWeek: 'Data for the last 7 days', nutritionChart: 'Calories for the period', unit: 'kcal', currentUser: 'You', olena: 'Olena', andrii: 'Andrii', sofia: 'Sofia', nutrition: 'Nutrition', last7Nutrition: 'over the last 7 days', weeklyKcal: 'total kcal', mealCount: 'meals logged', favoriteMeal: 'most frequent', categoryBreakdown: 'Breakdown by category', noCategoryData: 'No data for this period', factsTitle: '10 food facts', faqTitle: 'Frequently asked questions', faqQ1: 'Where is my data stored?', faqA1: 'All your food entries, workouts, and profile are stored locally in your browser and tied to your account — no external servers involved.', faqQ2: 'Does data sync between devices?', faqA2: "No, accounts and data are tied to this browser on this device. Clearing your cache or opening the app on another device means signing up again with an empty history.", faqQ3: 'How do I change my daily calorie goal?', faqA3: 'On the Nutrition tab, tap the goal value next to the "goal" label and enter a new number — it saves automatically.', faqQ4: 'How is BMI calculated?', faqA4: 'Body mass index is your weight in kilograms divided by your height in meters squared. Enter your height and weight in your profile to see the result.', faqQ5: 'Can I add a photo to a meal or my avatar?', faqA5: 'Yes, tap the camera icon next to the food entry form or your avatar in the profile to upload a photo from your device.', faqQ6: 'How do I switch the language or dark theme?', faqA6: 'Both the language and dark theme switch right in the header — the flag selector and the sun/moon button next to it.', training: 'Workouts', trainingCaption: 'Plan your weekly activity', trainingType: 'Workout type', unitLabel: 'Unit', quantity: 'Quantity', daysLabel: 'Days', exercisesPlaceholder: 'Exercises: squats, plank, push-ups...', notesPlaceholder: 'Note (optional)', addTraining: 'Add workout', strength: 'Strength', cardio: 'Cardio', yoga: 'Yoga', stretching: 'Stretching', minutes: 'min', sets: 'sets', sessions: 'times', mon: 'Mon', tue: 'Tue', wed: 'Wed', thu: 'Thu', fri: 'Fri', sat: 'Sat', sun: 'Sun', noTraining: 'No workouts planned yet', exercisesLabel: 'Exercises', noteLabel: 'Note', deleteTraining: 'Delete workout', confirmTitle: 'Change workout type?', confirmIncomplete: 'The current workout is incomplete. Switch to another type?', confirmComplete: 'The current workout is complete. Add it before switching or continue without saving.', confirmStay: 'Stay here', confirmContinue: 'Yes, continue', validation: 'Choose a day, enter a quantity, and add exercises before saving.', noData: '—', appName: 'TrackTime', pageTitle: 'TrackTime — calorie tracking', tagline: 'Take control of your life', today: 'Today', week: 'Week', goal: 'goal', chatOpen: 'Chat with support', chatTitle: 'Support', chatStatus: 'We usually reply quickly', chatPlaceholder: 'Type a message...', chatSend: 'Send', chatWelcome: "Hi there! 👋 A support manager will join the chat shortly.", programsNav: 'Programs', programsTitle: 'Training programs by specialists', programsCaption: 'Each program is individually written by a certified specialist for your level and goal', programStrengthName: 'Strength training', programStrengthDesc: 'A personal strength program with progressive overload, built by a coach around your goals and equipment.', programCardioName: 'Cardio', programCardioDesc: 'An endurance and weight-loss program that a specialist adapts to your current fitness level.', programYogaName: 'Yoga', programYogaDesc: 'An individual sequence of poses and breathing practices from an instructor, matched to your flexibility level.', programStretchingName: 'Stretching', programStretchingDesc: 'A mobility and flexibility plan built personally for you by a specialist.', programDiscount: '−30% for new users', programBuy: 'Buy program', programBuyToast: "This is a demo 🙂 Payments aren't connected yet — you'll be able to buy the program here soon.", nutritionPlansTitle: 'Nutrition plans by dietitians', nutritionPlansCaption: 'Each meal plan is individually written by a dietitian for your goal, weight, and lifestyle', planMassName: 'Mass gain', planMassDesc: 'A calorie-surplus diet with a balanced macro split, built by a dietitian for clean weight gain without excess fat.', planLossName: 'Weight loss', planLossDesc: 'A personal calorie-deficit meal plan that takes your taste, habits, and lifestyle into account.', planFatlossName: 'Fat loss', planFatlossDesc: 'A diet for lowering body fat percentage while preserving muscle mass, written by a nutrition specialist.', planMuscleName: 'Muscle gain', planMuscleDesc: 'A high-protein diet for muscle growth, built personally around your training and goal.',
+      languageLabel: 'Language', openSelect: 'Open list', photoLabel: 'Add photo', avatarLabel: 'Add avatar photo', profile: 'Profile', profileCaption: 'Your personal details and metrics', darkTheme: 'Dark theme', nameLabel: 'Name', namePlaceholder: 'For example, Olena', ageLabel: 'Age', agePlaceholder: 'Years', heightLabel: 'Height, cm', heightPlaceholder: 'For example, 170', weightLabel: 'Weight, kg', weightPlaceholder: 'For example, 70', bmiLabel: 'BMI', bmiCategoryLabel: 'Weight category', bmiAdviceLabel: 'Estimated BMI assessment', bmiUnderweight: 'Underweight', bmiNormal: 'Normal range', bmiOverweight: 'Overweight', bmiObesity1: 'Obesity class I', bmiObesity2: 'Obesity class II', bmiObesity3: 'Obesity class III', bmiNoData: 'Enter height and weight', saveProfile: 'Save profile', profileSaved: 'Profile saved', editField: 'Edit', sheetsSyncTitle: 'Google Sheets sync', sheetsSyncCaption: 'Enter your deployed Apps Script URL to keep a copy of your data (nutrition, workouts, profile) in a Google Sheet. Photos are not synced.', sheetsUrlPlaceholder: 'https://script.google.com/macros/s/.../exec', syncNow: 'Sync now', syncStatusIdle: 'Not synced yet', syncStatusSyncing: 'Syncing…', syncStatusSuccess: 'Synced', syncStatusError: 'Sync failed — check the URL', syncStatusNoUrl: 'Enter a URL first', periodFilter: 'Period', categoryFilter: 'Category', periodToday: 'Today', periodWeek: 'Last 7 days', allCategories: 'All categories', dashboard: 'Dashboard', dashboardToday: 'Data for today', dashboardWeek: 'Data for the last 7 days', nutritionChart: 'Calories for the period', unit: 'kcal', currentUser: 'You', olena: 'Olena', andrii: 'Andrii', sofia: 'Sofia', nutrition: 'Nutrition', last7Nutrition: 'over the last 7 days', weeklyKcal: 'total kcal', mealCount: 'meals logged', favoriteMeal: 'most frequent', categoryBreakdown: 'Breakdown by category', noCategoryData: 'No data for this period', factsTitle: '10 food facts', faqTitle: 'Frequently asked questions', faqQ1: 'Where is my data stored?', faqA1: 'All your food entries, workouts, and profile are stored locally in your browser and tied to your account — no external servers involved.', faqQ2: 'Does data sync between devices?', faqA2: "No, accounts and data are tied to this browser on this device. Clearing your cache or opening the app on another device means signing up again with an empty history.", faqQ3: 'How do I change my daily calorie goal?', faqA3: 'On the Nutrition tab, tap the goal value next to the "goal" label and enter a new number — it saves automatically.', faqQ4: 'How is BMI calculated?', faqA4: 'Body mass index is your weight in kilograms divided by your height in meters squared. Enter your height and weight in your profile to see the result.', faqQ5: 'Can I add a photo to a meal or my avatar?', faqA5: 'Yes, tap the camera icon next to the food entry form or your avatar in the profile to upload a photo from your device.', faqQ6: 'How do I switch the language or dark theme?', faqA6: 'Both the language and dark theme switch right in the header — the flag selector and the sun/moon button next to it.', training: 'Workouts', trainingCaption: 'Plan your weekly activity', trainingType: 'Workout type', unitLabel: 'Unit', quantity: 'Quantity', daysLabel: 'Days', exercisesPlaceholder: 'Exercises: squats, plank, push-ups...', notesPlaceholder: 'Note (optional)', addTraining: 'Add workout', strength: 'Strength', cardio: 'Cardio', yoga: 'Yoga', stretching: 'Stretching', minutes: 'min', sets: 'sets', sessions: 'times', mon: 'Mon', tue: 'Tue', wed: 'Wed', thu: 'Thu', fri: 'Fri', sat: 'Sat', sun: 'Sun', noTraining: 'No workouts planned yet', exercisesLabel: 'Exercises', noteLabel: 'Note', deleteTraining: 'Delete workout', confirmTitle: 'Change workout type?', confirmIncomplete: 'The current workout is incomplete. Switch to another type?', confirmComplete: 'The current workout is complete. Add it before switching or continue without saving.', confirmStay: 'Stay here', confirmContinue: 'Yes, continue', validation: 'Choose a day, enter a quantity, and add exercises before saving.', noData: '—', appName: 'TrackTime', pageTitle: 'TrackTime — calorie tracking', tagline: 'Take control of your life', today: 'Today', week: 'Week', goal: 'goal', chatOpen: 'Chat with support', chatTitle: 'Support', chatStatus: 'We usually reply quickly', chatPlaceholder: 'Type a message...', chatSend: 'Send', chatWelcome: "Hi there! 👋 A support manager will join the chat shortly.", programsNav: 'Programs', programsTitle: 'Training programs by specialists', programsCaption: 'Each program is individually written by a certified specialist for your level and goal', programStrengthName: 'Strength training', programStrengthDesc: 'A personal strength program with progressive overload, built by a coach around your goals and equipment.', programCardioName: 'Cardio', programCardioDesc: 'An endurance and weight-loss program that a specialist adapts to your current fitness level.', programYogaName: 'Yoga', programYogaDesc: 'An individual sequence of poses and breathing practices from an instructor, matched to your flexibility level.', programStretchingName: 'Stretching', programStretchingDesc: 'A mobility and flexibility plan built personally for you by a specialist.', programDiscount: '−30% for new users', programBuy: 'Buy program', programBuyToast: "This is a demo 🙂 Payments aren't connected yet — you'll be able to buy the program here soon.", nutritionPlansTitle: 'Nutrition plans by dietitians', nutritionPlansCaption: 'Each meal plan is individually written by a dietitian for your goal, weight, and lifestyle', planMassName: 'Mass gain', planMassDesc: 'A calorie-surplus diet with a balanced macro split, built by a dietitian for clean weight gain without excess fat.', planLossName: 'Weight loss', planLossDesc: 'A personal calorie-deficit meal plan that takes your taste, habits, and lifestyle into account.', planFatlossName: 'Fat loss', planFatlossDesc: 'A diet for lowering body fat percentage while preserving muscle mass, written by a nutrition specialist.', planMuscleName: 'Muscle gain', planMuscleDesc: 'A high-protein diet for muscle growth, built personally around your training and goal.',
       foodPlaceholder: 'What did you eat?', chooseDish: 'Choose...', categoryLabel: 'Meal category', breakfast: 'Breakfast',
       lunch: 'Lunch', dinner: 'Dinner', snack: 'Snack', record: 'Log food', todayEntries: "Today's entries",
       resetToday: 'Reset today', leaderboard: 'Leaderboard', thisWeek: 'this week', average: 'daily average, kcal',
@@ -2715,6 +2774,119 @@
       localStorage.setItem(stateKeyFor(auth.session), JSON.stringify(state));
     } catch (e) {
       console.warn('Storage write failed', e);
+    }
+    scheduleSheetsPush();
+  }
+
+  const SHEETS_URL_KEY = 'calorie-tracker-sheets-url';
+
+  function loadSheetsUrl() {
+    try { return localStorage.getItem(SHEETS_URL_KEY) || ''; } catch (e) { return ''; }
+  }
+  function saveSheetsUrl(url) {
+    try { localStorage.setItem(SHEETS_URL_KEY, url); } catch (e) { console.warn('Sheets URL storage write failed', e); }
+  }
+  let sheetsUrl = loadSheetsUrl();
+
+  function buildSyncPayload() {
+    const history = {};
+    Object.keys(state.history || {}).forEach((key) => {
+      history[key] = {
+        entries: (state.history[key].entries || []).map((entry) => ({
+          id: entry.id, name: entry.name, category: entry.category, kcal: entry.kcal
+        }))
+      };
+    });
+    const profile = state.profile || {};
+    return {
+      email: auth.session,
+      goal: state.goal,
+      language: state.language,
+      theme: state.theme,
+      history,
+      training: (state.training || []).map((tr) => ({
+        id: tr.id, type: tr.type, quantity: tr.quantity, unit: tr.unit, days: tr.days, exercises: tr.exercises, notes: tr.notes
+      })),
+      profile: { name: profile.name, age: profile.age, height: profile.height, weight: profile.weight }
+    };
+  }
+
+  function setSyncStatus(status) {
+    if (!sheetsSyncStatus) return;
+    const map = {
+      idle: t('syncStatusIdle'),
+      syncing: t('syncStatusSyncing'),
+      success: t('syncStatusSuccess'),
+      error: t('syncStatusError'),
+      noUrl: t('syncStatusNoUrl')
+    };
+    sheetsSyncStatus.textContent = map[status] || '';
+    sheetsSyncStatus.classList.toggle('is-success', status === 'success');
+    sheetsSyncStatus.classList.toggle('is-error', status === 'error' || status === 'noUrl');
+  }
+
+  let sheetsPushTimer = null;
+  function scheduleSheetsPush() {
+    if (!sheetsUrl || !auth.session) return;
+    clearTimeout(sheetsPushTimer);
+    sheetsPushTimer = setTimeout(() => { pushToSheets(); }, 800);
+  }
+
+  async function pushToSheets() {
+    if (!sheetsUrl || !auth.session) return false;
+    setSyncStatus('syncing');
+    try {
+      const res = await fetch(sheetsUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(buildSyncPayload())
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      setSyncStatus('success');
+      return true;
+    } catch (e) {
+      console.warn('Sheets push failed', e);
+      setSyncStatus('error');
+      return false;
+    }
+  }
+
+  async function pullFromSheets() {
+    if (!sheetsUrl || !auth.session) return false;
+    setSyncStatus('syncing');
+    try {
+      const url = sheetsUrl + (sheetsUrl.indexOf('?') === -1 ? '?' : '&') + 'email=' + encodeURIComponent(auth.session);
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const remote = await res.json();
+      if (remote.error) throw new Error(remote.error);
+
+      state.goal = typeof remote.goal === 'number' ? remote.goal : state.goal;
+      state.language = remote.language === 'en' ? 'en' : state.language;
+      state.theme = remote.theme === 'dark' ? 'dark' : state.theme;
+
+      const mergedHistory = {};
+      Object.keys(remote.history || {}).forEach((key) => {
+        const localDay = state.history[key];
+        mergedHistory[key] = {
+          entries: (remote.history[key].entries || []).map((entry) => {
+            const localEntry = localDay && localDay.entries.find((e) => e.id === entry.id);
+            return Object.assign({}, entry, { photo: localEntry ? localEntry.photo : '' });
+          })
+        };
+      });
+      state.history = mergedHistory;
+      state.training = remote.training || [];
+      const localAvatar = (state.profile && state.profile.avatar) || '';
+      state.profile = Object.assign({}, remote.profile, { avatar: localAvatar });
+
+      try { localStorage.setItem(stateKeyFor(auth.session), JSON.stringify(state)); } catch (e) { console.warn('Storage write failed', e); }
+      setSyncStatus('success');
+      return true;
+    } catch (e) {
+      console.warn('Sheets pull failed', e);
+      setSyncStatus('error');
+      return false;
     }
   }
 
@@ -2921,6 +3093,9 @@
   const registerFormError = document.getElementById('registerFormError');
   const logoutBtn = document.getElementById('logoutBtn');
   const profileAccountEmail = document.getElementById('profileAccountEmail');
+  const sheetsUrlInput = document.getElementById('sheetsUrlInput');
+  const sheetsSyncNowBtn = document.getElementById('sheetsSyncNowBtn');
+  const sheetsSyncStatus = document.getElementById('sheetsSyncStatus');
   const tabBtns = document.querySelectorAll('.tab-btn');
   const views = {
     dashboard: document.getElementById('view-dashboard'),
@@ -3358,6 +3533,8 @@
     updateProfileMetrics();
     applyProfileFieldLocks();
     updateProfileSaveVisibility();
+    if (document.activeElement !== sheetsUrlInput) sheetsUrlInput.value = sheetsUrl;
+    if (sheetsSyncStatus && !sheetsSyncStatus.textContent) setSyncStatus('idle');
   }
 
   function updateProfileSaveVisibility() {
@@ -3888,6 +4065,9 @@
     showMainTab('dashboard');
     renderAll();
     updateAuthVisibility();
+    if (sheetsUrl) {
+      pullFromSheets().then((ok) => { if (ok) renderAll(); });
+    }
   }
 
   authTabBtns.forEach((btn) => {
@@ -4003,9 +4183,25 @@
     showToast(t('loggedOut'));
   });
 
+  sheetsUrlInput.addEventListener('change', function () {
+    sheetsUrl = sheetsUrlInput.value.trim();
+    saveSheetsUrl(sheetsUrl);
+    if (!sheetsUrl) { setSyncStatus('idle'); return; }
+    pullFromSheets().then((ok) => { if (ok) renderAll(); });
+  });
+  sheetsSyncNowBtn.addEventListener('click', async function () {
+    if (!sheetsUrl) { setSyncStatus('noUrl'); return; }
+    await pushToSheets();
+    const ok = await pullFromSheets();
+    if (ok) renderAll();
+  });
+
   showMainTab('dashboard');
   renderAll();
   updateAuthVisibility();
+  if (auth.session && sheetsUrl) {
+    pullFromSheets().then((ok) => { if (ok) renderAll(); });
+  }
 })();
 </script>
 </body>
