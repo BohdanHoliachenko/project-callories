@@ -134,22 +134,151 @@
     background-repeat: no-repeat;
     padding-right: 30px;
   }
-  .theme-fab {
+  .theme-toggle {
     float: right;
-    margin-top: -27px;
+    margin-top: -26px;
     margin-right: 8px;
-    width: 30px;
-    height: 30px;
-    border: 1px solid var(--line);
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .theme-toggle-track {
+    position: relative;
+    display: block;
+    width: 54px;
+    height: 28px;
     border-radius: 999px;
-    background: var(--surface);
-    color: var(--ink-soft);
-    font-size: 14px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: linear-gradient(100deg, #BFE3FF 0%, #FFE7B0 100%);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12);
+    transition: background 0.5s ease, border-color 0.5s ease;
+  }
+  .theme-toggle:hover .theme-toggle-track { border-color: var(--accent); }
+  .theme-toggle:active .theme-toggle-track { transform: scale(0.96); }
+  :root[data-theme="dark"] .theme-toggle-track {
+    background: linear-gradient(100deg, #141C28 0%, #2B1E3F 100%);
+  }
+  .theme-toggle-stars {
+    position: absolute;
+    inset: 0;
+  }
+  .theme-toggle-stars i {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    background: #fff;
+    opacity: 0;
+    transform: scale(0);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .theme-toggle-stars i:nth-child(1) { top: 5px; left: 7px; transition-delay: 0.04s; }
+  .theme-toggle-stars i:nth-child(2) { top: 13px; left: 12px; transition-delay: 0.1s; }
+  .theme-toggle-stars i:nth-child(3) { top: 6px; left: 18px; transition-delay: 0.16s; }
+  .theme-toggle-stars i:nth-child(4) { top: 17px; left: 22px; transition-delay: 0.22s; }
+  .theme-toggle-stars i:nth-child(5) { top: 9px; left: 28px; transition-delay: 0.28s; }
+  .theme-toggle-stars i:nth-child(6) { top: 19px; left: 9px; transition-delay: 0.34s; }
+  :root[data-theme="dark"] .theme-toggle-stars i {
+    opacity: 1;
+    transform: scale(1);
+    animation: starTwinkle 2.4s ease-in-out infinite;
+  }
+  :root[data-theme="dark"] .theme-toggle-stars i:nth-child(2) { animation-delay: 0.4s; }
+  :root[data-theme="dark"] .theme-toggle-stars i:nth-child(3) { animation-delay: 0.8s; }
+  :root[data-theme="dark"] .theme-toggle-stars i:nth-child(4) { animation-delay: 1.2s; }
+  :root[data-theme="dark"] .theme-toggle-stars i:nth-child(5) { animation-delay: 1.6s; }
+  :root[data-theme="dark"] .theme-toggle-stars i:nth-child(6) { animation-delay: 2s; }
+  @keyframes starTwinkle {
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 1; }
+  }
+  .theme-toggle-clouds {
+    position: absolute;
+    inset: 0;
+  }
+  .theme-toggle-clouds i {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.85);
+    transition: opacity 0.35s ease, transform 0.4s ease;
+  }
+  .theme-toggle-clouds i:nth-child(1) { width: 11px; height: 7px; top: 6px; left: 33px; }
+  .theme-toggle-clouds i:nth-child(2) { width: 7px; height: 5px; top: 16px; left: 37px; transition-delay: 0.05s; }
+  :root[data-theme="dark"] .theme-toggle-clouds i {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  .theme-toggle-glow {
+    position: absolute;
+    top: 50%;
+    left: 3px;
+    width: 22px;
+    height: 22px;
+    margin-top: -11px;
+    border-radius: 50%;
+    background: var(--gold);
+    opacity: 0;
+    pointer-events: none;
+    transition: left 0.55s cubic-bezier(.34, 1.56, .64, 1);
+  }
+  :root[data-theme="dark"] .theme-toggle-glow { left: 29px; }
+  .theme-toggle.is-bursting .theme-toggle-glow { animation: toggleGlowPing 0.55s ease-out; }
+  @keyframes toggleGlowPing {
+    0% { opacity: 0.55; transform: scale(0.7); }
+    100% { opacity: 0; transform: scale(1.9); }
+  }
+  .theme-toggle-thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
     display: grid;
     place-items: center;
-    cursor: pointer;
+    background: linear-gradient(160deg, #FFF6DD, #FFD777);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.28);
+    transform: translateX(0) rotate(0deg);
+    transition: transform 0.55s cubic-bezier(.34, 1.56, .64, 1), background 0.5s ease;
   }
-  .theme-fab:hover { border-color: var(--accent); color: var(--accent); }
+  :root[data-theme="dark"] .theme-toggle-thumb {
+    transform: translateX(26px) rotate(360deg);
+    background: linear-gradient(160deg, #EDE9F7, #BDB0E0);
+  }
+  .theme-toggle-sun, .theme-toggle-moon {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    transition: opacity 0.3s ease, transform 0.4s ease;
+  }
+  .theme-toggle-sun {
+    opacity: 1;
+    fill: none;
+    stroke: #B4790C;
+    stroke-width: 2;
+    stroke-linecap: round;
+    transform: scale(1) rotate(0deg);
+  }
+  .theme-toggle-moon {
+    opacity: 0;
+    fill: #4A3B6B;
+    transform: scale(0.4) rotate(-90deg);
+  }
+  :root[data-theme="dark"] .theme-toggle-sun {
+    opacity: 0;
+    transform: scale(0.4) rotate(90deg);
+  }
+  :root[data-theme="dark"] .theme-toggle-moon {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .theme-toggle-track, .theme-toggle-thumb, .theme-toggle-sun, .theme-toggle-moon,
+    .theme-toggle-stars i, .theme-toggle-clouds i, .theme-toggle-glow { transition: none; animation: none; }
+  }
   .add-form select {
     appearance: none;
     padding-right: 24px;
@@ -187,6 +316,7 @@
     display: flex;
     flex-direction: column;
   }
+  .shell[hidden] { display: none; }
   .content { min-width: 0; }
 
   .sidebar-deco {
@@ -223,24 +353,21 @@
     background: var(--gold);
     animation: deco-float-b 6.5s ease-in-out infinite;
   }
-  .sidebar-deco-dots {
+  .sidebar-deco-mark {
     position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+    top: 50%;
+    left: 50%;
+    width: 38px;
+    height: 38px;
+    transform: translate(-50%, -50%) scale(1);
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 1.3;
+    stroke-linecap: round;
+    opacity: 0.5;
+    animation: deco-breathe 4.5s ease-in-out infinite;
   }
-  .sidebar-deco-dots span {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--accent);
-    opacity: 0.35;
-    animation: deco-pulse 1.8s ease-in-out infinite;
-  }
-  .sidebar-deco-dots span:nth-child(2) { background: var(--gold); animation-delay: 0.2s; }
-  .sidebar-deco-dots span:nth-child(3) { animation-delay: 0.4s; }
+  .sidebar-deco-mark .deco-vein { stroke: var(--gold); }
   @keyframes deco-float-a {
     0%, 100% { transform: translate(0, 0) scale(1); }
     50% { transform: translate(16px, -14px) scale(1.18); }
@@ -249,14 +376,14 @@
     0%, 100% { transform: translate(0, 0) scale(1); }
     50% { transform: translate(-14px, 14px) scale(0.85); }
   }
-  @keyframes deco-pulse {
-    0%, 100% { transform: scale(1); opacity: 0.35; }
-    50% { transform: scale(1.9); opacity: 0.9; }
+  @keyframes deco-breathe {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.4; }
+    50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.75; }
   }
   @media (prefers-reduced-motion: reduce) {
     .sidebar-deco::before,
     .sidebar-deco::after,
-    .sidebar-deco-dots span { animation: none; }
+    .sidebar-deco-mark { animation: none; }
   }
 
   @media (min-width: 860px) {
@@ -1390,6 +1517,7 @@
   }
   .chat-fab svg { width: 26px; height: 26px; }
   .chat-fab:hover { transform: scale(1.06) rotate(-4deg); border-radius: 26px; }
+  .chat-fab[hidden] { display: none; }
   .chat-panel {
     position: fixed;
     right: 22px;
@@ -1561,6 +1689,288 @@
     font: 500 14px 'Inter', sans-serif;
     cursor: pointer;
   }
+  .profile-account {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .profile-account-email {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .logout-btn {
+    flex: none;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 7px 14px;
+    background: var(--surface);
+    color: var(--warn);
+    font: 500 12.5px 'Inter', sans-serif;
+    cursor: pointer;
+  }
+  .logout-btn:hover { border-color: var(--warn); }
+
+  /* auth screen */
+  .auth-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 28px;
+  }
+  .auth-screen[hidden] { display: none; }
+  .auth-card {
+    width: 100%;
+    max-width: 380px;
+    padding: 20px 18px 18px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  .auth-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--accent-soft);
+    padding: 4px;
+    border-radius: 999px;
+    margin-bottom: 20px;
+  }
+  .auth-tab-btn {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: var(--ink-soft);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 9px 0;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .auth-tab-btn.active {
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  }
+  .auth-form[hidden] { display: none; }
+  .auth-form {
+    display: grid;
+    gap: 10px;
+  }
+  .auth-form label {
+    display: grid;
+    gap: 5px;
+    color: var(--ink-soft);
+    font-size: 12px;
+  }
+  .auth-form input {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 11px 12px;
+    background: var(--bg);
+    color: var(--ink);
+    font: 14px 'Inter', sans-serif;
+  }
+  .auth-form input:focus { outline: none; border-color: var(--accent); }
+  .auth-form input.invalid { border-color: var(--warn); }
+  .field-error {
+    display: none;
+    margin: -4px 0 0;
+    color: var(--warn);
+    font-size: 11.5px;
+    line-height: 1.3;
+  }
+  .field-error.visible { display: block; }
+  .auth-form-error {
+    display: none;
+    margin: 0;
+    padding: 9px 11px;
+    border-radius: 8px;
+    background: var(--warn-soft);
+    color: var(--warn);
+    font-size: 12.5px;
+    line-height: 1.4;
+  }
+  .auth-form-error.visible { display: block; }
+  .auth-submit {
+    margin-top: 4px;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 16px;
+    background: var(--accent);
+    color: var(--surface);
+    font: 500 14px 'Inter', sans-serif;
+    cursor: pointer;
+  }
+  .auth-submit:active { transform: translateY(1px); }
+
+  /* auth hero / logo */
+  .auth-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+  .logo-badge {
+    position: relative;
+    width: 88px;
+    height: 88px;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .logo-badge:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 22px; }
+  .logo-mark {
+    width: 100%;
+    height: 100%;
+    display: block;
+    filter: drop-shadow(0 8px 16px rgba(153, 99, 47, 0.28));
+    transition: transform 0.18s ease;
+  }
+  .logo-badge:hover .logo-mark { transform: translateY(-2px) scale(1.03); }
+  .logo-badge:active .logo-mark { transform: scale(0.92); }
+  .logo-ring {
+    fill: none;
+    stroke: url(#logoRingGrad);
+    transform: rotate(-90deg);
+    transform-origin: 44px 44px;
+  }
+  .logo-badge-bg { fill: url(#logoBadgeGrad); }
+  .logo-leaf { fill: rgba(255, 255, 255, 0.96); }
+  .logo-vein { fill: none; stroke: var(--accent); stroke-opacity: 0.45; }
+  .logo-ping {
+    position: absolute;
+    inset: 8px;
+    border-radius: 22px;
+    border: 2px solid var(--gold);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .logo-spark {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .logo-spark i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 7px;
+    height: 7px;
+    margin: -3.5px 0 0 -3.5px;
+    border-radius: 50%;
+    background: var(--gold);
+    opacity: 0;
+  }
+  .logo-spark i:nth-child(1) { --tx: 0px; --ty: -38px; background: var(--gold); }
+  .logo-spark i:nth-child(2) { --tx: 33px; --ty: -19px; background: var(--accent); }
+  .logo-spark i:nth-child(3) { --tx: 33px; --ty: 19px; background: var(--gold); }
+  .logo-spark i:nth-child(4) { --tx: 0px; --ty: 38px; background: var(--accent); }
+  .logo-spark i:nth-child(5) { --tx: -33px; --ty: 19px; background: var(--gold); }
+  .logo-spark i:nth-child(6) { --tx: -33px; --ty: -19px; background: var(--accent); }
+  @keyframes logoPop {
+    0% { transform: scale(1) rotate(0deg); }
+    35% { transform: scale(0.85) rotate(-6deg); }
+    65% { transform: scale(1.12) rotate(4deg); }
+    100% { transform: scale(1) rotate(0deg); }
+  }
+  @keyframes logoRingSpin {
+    from { transform: rotate(-90deg); }
+    to { transform: rotate(270deg); }
+  }
+  @keyframes logoPing {
+    0% { transform: scale(0.85); opacity: 0.65; }
+    100% { transform: scale(1.4); opacity: 0; }
+  }
+  @keyframes logoSpark {
+    0% { transform: translate(0, 0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+  }
+  .logo-badge.is-bursting .logo-mark { animation: logoPop 0.6s cubic-bezier(.34, 1.56, .64, 1); }
+  .logo-badge.is-bursting .logo-ring { animation: logoRingSpin 0.6s ease-out; }
+  .logo-badge.is-bursting .logo-ping { animation: logoPing 0.6s ease-out; }
+  .logo-badge.is-bursting .logo-spark i { animation: logoSpark 0.6s ease-out forwards; }
+  .auth-hero-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .auth-hero-tagline {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-top: -8px;
+  }
+
+  /* splash screen */
+  .splash-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 20px;
+    text-align: center;
+    background:
+      linear-gradient(90deg, rgba(151, 189, 163, 0.25), transparent 22%, transparent 78%, rgba(151, 189, 163, 0.25)),
+      linear-gradient(180deg, var(--bg) 0, var(--bg) 30%, var(--bg) 70%, var(--bg) 100%);
+    cursor: pointer;
+  }
+  .splash-screen[hidden] { display: none; }
+  .logo-badge-lg { width: 132px; height: 132px; }
+  .splash-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-top: 8px;
+  }
+  .splash-tagline {
+    font-size: 15px;
+    color: var(--ink-soft);
+    margin-top: -8px;
+  }
+  @keyframes splashLeave {
+    0% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.12); }
+  }
+  @keyframes splashEnter {
+    0% { opacity: 0; transform: scale(0.92); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  @keyframes authEnter {
+    0% { opacity: 0; transform: translateY(14px) scale(0.97); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes authLeave {
+    0% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(0.92); }
+  }
+  .splash-screen.is-leaving { animation: splashLeave 0.5s cubic-bezier(.4,0,.2,1) forwards; }
+  .splash-screen.is-entering { animation: splashEnter 0.5s cubic-bezier(.34,1.56,.64,1); }
+  .auth-screen.is-entering { animation: authEnter 0.5s cubic-bezier(.34,1.56,.64,1); }
+  .auth-screen.is-leaving { animation: authLeave 0.4s cubic-bezier(.4,0,.2,1) forwards; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .logo-mark, .logo-badge.is-bursting .logo-mark, .logo-badge.is-bursting .logo-ring,
+    .logo-badge.is-bursting .logo-ping, .logo-badge.is-bursting .logo-spark i { animation: none; transition: none; }
+    .splash-screen.is-leaving, .splash-screen.is-entering,
+    .auth-screen.is-entering, .auth-screen.is-leaving { animation: none; }
+  }
 
   /* dashboard view */
   .stat-grid {
@@ -1629,14 +2039,27 @@
     right: 0;
     border-radius: 6px 6px 3px 3px;
     background: var(--accent);
+    transform: scaleY(1);
+    transform-origin: bottom;
+    transition: transform 0.3s cubic-bezier(.34, 1.56, .64, 1), filter 0.3s ease, box-shadow 0.3s ease;
   }
   .chart-bar-fill.over { background: var(--warn); }
+  .chart-col:hover .chart-bar-fill {
+    transform: scaleY(1.07);
+    filter: brightness(1.1) saturate(1.1);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.22);
+  }
   .chart-day {
     font-size: 11px;
     color: var(--ink-soft);
     margin-top: 8px;
+    transition: color 0.25s ease, transform 0.25s cubic-bezier(.34, 1.56, .64, 1);
   }
   .chart-day.today { color: var(--ink); font-weight: 600; }
+  .chart-col:hover .chart-day {
+    color: var(--accent);
+    transform: scale(1.08);
+  }
 
   @media (max-width: 480px) {
     body::before,
@@ -1651,7 +2074,9 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .bar-fill, .chart-bar-fill, .category-fill, .toast { transition: none; }
+    .bar-fill, .chart-bar-fill, .category-fill, .toast, .chart-day { transition: none; }
+    .chart-col:hover .chart-bar-fill { transform: none; filter: none; box-shadow: none; }
+    .chart-col:hover .chart-day { transform: none; }
   }
 </style>
 </head>
@@ -1659,34 +2084,131 @@
   <div class="wrap">
     <header class="top">
       <div class="brand" data-i18n="appName">TrackTime</div>
-      <div class="tagline" data-i18n="tagline">Проста фіксація їжі на день</div>
+      <div class="tagline" data-i18n="tagline">Контролюй своє життя</div>
       <select class="language-select" id="languageSelect" data-i18n-aria="languageLabel" aria-label="Мова">
         <option value="uk">🇺🇦 UA</option>
         <option value="en">🇬🇧 EN</option>
       </select>
-      <button class="theme-fab" id="themeFab" type="button" data-i18n-aria="darkTheme" aria-label="Темна тема">
-        <span aria-hidden="true">🌙</span>
+      <button class="theme-toggle" id="themeFab" type="button" role="switch" aria-checked="false" data-i18n-aria="darkTheme" aria-label="Темна тема">
+        <span class="theme-toggle-track" aria-hidden="true">
+          <span class="theme-toggle-stars"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+          <span class="theme-toggle-clouds"><i></i><i></i></span>
+          <span class="theme-toggle-glow"></span>
+          <span class="theme-toggle-thumb">
+            <svg class="theme-toggle-sun" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="5"/>
+              <line x1="12" y1="1" x2="12" y2="3"/>
+              <line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="1" y1="12" x2="3" y2="12"/>
+              <line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.2" y1="4.2" x2="5.6" y2="5.6"/>
+              <line x1="18.4" y1="18.4" x2="19.8" y2="19.8"/>
+              <line x1="4.2" y1="19.8" x2="5.6" y2="18.4"/>
+              <line x1="18.4" y1="5.6" x2="19.8" y2="4.2"/>
+            </svg>
+            <svg class="theme-toggle-moon" viewBox="0 0 24 24">
+              <path d="M20.8 14.3A8.5 8.5 0 1 1 9.7 3.2a7 7 0 0 0 11.1 11.1z"/>
+            </svg>
+          </span>
+        </span>
       </button>
     </header>
 
-    <div class="shell">
+    <div class="auth-screen" id="authScreen" hidden>
+      <div class="auth-hero">
+        <button class="logo-badge" id="logoBadge" type="button" data-i18n-aria="splashBack" aria-label="TrackTime — подвійний клік, щоб повернутися на початок" title="Подвійний клік — на початок">
+          <svg class="logo-mark" viewBox="0 0 88 88" aria-hidden="true" focusable="false">
+            <defs>
+              <linearGradient id="logoBadgeGrad" x1="16" y1="16" x2="72" y2="72" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="var(--accent)"/>
+                <stop offset="1" stop-color="var(--gold)"/>
+              </linearGradient>
+              <linearGradient id="logoRingGrad" x1="4" y1="4" x2="84" y2="84" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="var(--gold)"/>
+                <stop offset="1" stop-color="var(--accent)"/>
+              </linearGradient>
+            </defs>
+            <circle class="logo-ring" cx="44" cy="44" r="40" stroke-width="3" stroke-linecap="round" stroke-dasharray="185 67"/>
+            <rect class="logo-badge-bg" x="16" y="16" width="56" height="56" rx="18"/>
+            <path class="logo-leaf" d="M44,28 C55,33 56,55 44,60 C32,55 33,33 44,28 Z"/>
+            <path class="logo-vein" d="M44,33 C41,40 41,48 44,55" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="logo-ping" aria-hidden="true"></span>
+          <span class="logo-spark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+        </button>
+        <div class="auth-hero-name">TrackTime</div>
+        <div class="auth-hero-tagline" data-i18n="tagline">Контролюй своє життя</div>
+      </div>
+      <div class="auth-card">
+        <div class="auth-tabs">
+          <button class="auth-tab-btn active" type="button" data-auth-tab="login" data-i18n="loginTab">Вхід</button>
+          <button class="auth-tab-btn" type="button" data-auth-tab="register" data-i18n="registerTab">Реєстрація</button>
+        </div>
+
+        <form class="auth-form" id="loginForm" novalidate>
+          <label>
+            <span data-i18n="emailLabel">Email</span>
+            <input id="loginEmail" type="email" autocomplete="username" data-i18n-placeholder="emailPlaceholder" placeholder="you@example.com">
+          </label>
+          <p class="field-error" id="loginEmailError" role="alert"></p>
+          <label>
+            <span data-i18n="passwordLabel">Пароль</span>
+            <input id="loginPassword" type="password" autocomplete="current-password">
+          </label>
+          <p class="field-error" id="loginPasswordError" role="alert"></p>
+          <p class="auth-form-error" id="loginFormError" role="alert"></p>
+          <button class="auth-submit" type="submit" data-i18n="loginSubmit">Увійти</button>
+        </form>
+
+        <form class="auth-form" id="registerForm" novalidate hidden>
+          <label>
+            <span data-i18n="nameLabel">Ім’я</span>
+            <input id="registerName" type="text" autocomplete="name" data-i18n-placeholder="namePlaceholder" placeholder="Наприклад, Олена">
+          </label>
+          <p class="field-error" id="registerNameError" role="alert"></p>
+          <label>
+            <span data-i18n="emailLabel">Email</span>
+            <input id="registerEmail" type="email" autocomplete="username" data-i18n-placeholder="emailPlaceholder" placeholder="you@example.com">
+          </label>
+          <p class="field-error" id="registerEmailError" role="alert"></p>
+          <label>
+            <span data-i18n="passwordLabel">Пароль</span>
+            <input id="registerPassword" type="password" autocomplete="new-password">
+          </label>
+          <p class="field-error" id="registerPasswordError" role="alert"></p>
+          <label>
+            <span data-i18n="confirmPasswordLabel">Підтвердження пароля</span>
+            <input id="registerConfirm" type="password" autocomplete="new-password">
+          </label>
+          <p class="field-error" id="registerConfirmError" role="alert"></p>
+          <p class="auth-form-error" id="registerFormError" role="alert"></p>
+          <button class="auth-submit" type="submit" data-i18n="registerSubmit">Зареєструватися</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="shell" id="appShell">
     <nav class="tabs">
-      <button class="tab-btn active" data-tab="nutrition" data-i18n="nutrition">Харчування</button>
+      <button class="tab-btn active" data-tab="dashboard" data-i18n="dashboard">Дашборд</button>
+      <button class="tab-btn" data-tab="nutrition" data-i18n="nutrition">Харчування</button>
       <button class="tab-btn" data-tab="training" data-i18n="training">Тренування</button>
       <button class="tab-btn" data-tab="profile" data-i18n="profile">Профіль</button>
       <button class="tab-btn" data-tab="programs" data-i18n="programsNav">Програми</button>
       <div class="sidebar-deco" aria-hidden="true">
-        <div class="sidebar-deco-dots"><span></span><span></span><span></span></div>
+        <svg class="sidebar-deco-mark" viewBox="0 0 24 24">
+          <path d="M12,5 C17,8 17,16 12,19 C7,16 7,8 12,5 Z"/>
+          <path class="deco-vein" d="M12,8 C10.3,10.5 10.3,13.5 12,16"/>
+        </svg>
       </div>
     </nav>
     <div class="content">
 
-    <!-- TODAY VIEW -->
-    <section class="view active" id="view-nutrition">
-      <div class="dashboard-filters" aria-label="Фільтри харчування">
+    <!-- DASHBOARD VIEW -->
+    <section class="view active" id="view-dashboard">
+      <div class="dashboard-filters" aria-label="Фільтри дашборда">
         <select id="nutritionPeriod" data-i18n-aria="periodFilter" aria-label="Період">
           <option value="today" data-i18n="periodToday">Сьогодні</option>
-          <option value="week" data-i18n="periodWeek">Останні 7 днів</option>
+          <option value="week" data-i18n="periodWeek" selected>Останні 7 днів</option>
         </select>
         <select id="nutritionCategory" data-i18n-aria="categoryFilter" aria-label="Категорія">
           <option value="all" data-i18n="allCategories">Усі категорії</option>
@@ -1696,6 +2218,66 @@
           <option value="Перекус" data-i18n="snack">Перекус</option>
         </select>
       </div>
+
+      <section class="nutrition-dashboard" aria-labelledby="dashboardTitle">
+        <div class="nutrition-title" id="dashboardTitle" data-i18n="dashboard">Дашборд</div>
+        <div class="nutrition-caption" id="dashboardCaption" data-i18n="dashboardToday">Дані за сьогодні</div>
+        <div class="stat-grid">
+          <div class="stat-card"><div class="stat-value" id="statAvg">0</div><div class="stat-label" data-i18n="average">середнє за день, ккал</div></div>
+          <div class="stat-card"><div class="stat-value gold" id="statStreak">0</div><div class="stat-label" data-i18n="streakLabel">днів поспіль у межах цілі</div></div>
+          <div class="stat-card"><div class="stat-value" id="statBest">—</div><div class="stat-label" data-i18n="bestDay">найкращий день</div></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title" data-i18n="nutritionChart">Калорії за період</div>
+          <div class="chart-bars" id="chartBars"></div>
+        </div>
+      </section>
+
+      <section class="nutrition" aria-labelledby="nutritionTitle">
+        <div class="nutrition-title" id="nutritionTitle" data-i18n="nutrition">Харчування</div>
+        <div class="nutrition-caption" data-i18n="last7Nutrition">за останні 7 днів</div>
+        <div class="nutrition-grid">
+          <div class="nutrition-card">
+            <div class="nutrition-value" id="nutritionKcal">0</div>
+            <div class="nutrition-label" data-i18n="weeklyKcal">всього ккал</div>
+          </div>
+          <div class="nutrition-card">
+            <div class="nutrition-value" id="nutritionMeals">0</div>
+            <div class="nutrition-label" data-i18n="mealCount">прийомів їжі</div>
+          </div>
+          <div class="nutrition-card">
+            <div class="nutrition-value" id="nutritionFavorite">—</div>
+            <div class="nutrition-label" data-i18n="favoriteMeal">найчастіше</div>
+          </div>
+        </div>
+        <div class="category-chart-title" data-i18n="categoryBreakdown">Розподіл за категоріями</div>
+        <div class="category-chart" id="categoryChart" aria-label="Розподіл калорій за категоріями"></div>
+      </section>
+
+      <section class="leaderboard" aria-labelledby="leaderboardTitle">
+        <div class="leaderboard-heading">
+          <div class="leaderboard-title" id="leaderboardTitle" data-i18n="leaderboard">Лідерборд</div>
+          <div class="leaderboard-caption" data-i18n="thisWeek">цього тижня</div>
+        </div>
+        <ol class="leaderboard-list" id="leaderboardList"></ol>
+      </section>
+
+      <div class="profile-modal" id="profileModal" hidden>
+        <div class="profile-dialog" role="dialog" aria-modal="true" aria-labelledby="profileTitle">
+          <div class="profile-dialog-header">
+            <div>
+              <h2 id="profileTitle"></h2>
+              <div class="profile-rank" id="profileRank"></div>
+            </div>
+              <button class="profile-close" id="profileClose" type="button" data-i18n-aria="close" aria-label="Закрити">×</button>
+          </div>
+          <p class="profile-detail" id="profileDetail"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TODAY VIEW -->
+    <section class="view" id="view-nutrition">
       <div class="hero">
         <div class="hero-number" id="remainingNumber">0</div>
         <div class="hero-label" id="remainingLabel">ккал залишилось на сьогодні</div>
@@ -1749,49 +2331,6 @@
         <button class="reset-btn" id="resetBtn" type="button" data-i18n="resetToday">Скинути сьогоднішній день</button>
       </div>
 
-      <section class="leaderboard" aria-labelledby="leaderboardTitle">
-        <div class="leaderboard-heading">
-          <div class="leaderboard-title" id="leaderboardTitle" data-i18n="leaderboard">Лідерборд</div>
-          <div class="leaderboard-caption" data-i18n="thisWeek">цього тижня</div>
-        </div>
-        <ol class="leaderboard-list" id="leaderboardList"></ol>
-      </section>
-
-      <section class="nutrition" aria-labelledby="nutritionTitle">
-        <div class="nutrition-title" id="nutritionTitle" data-i18n="nutrition">Харчування</div>
-        <div class="nutrition-caption" data-i18n="last7Nutrition">за останні 7 днів</div>
-        <div class="nutrition-grid">
-          <div class="nutrition-card">
-            <div class="nutrition-value" id="nutritionKcal">0</div>
-            <div class="nutrition-label" data-i18n="weeklyKcal">всього ккал</div>
-          </div>
-          <div class="nutrition-card">
-            <div class="nutrition-value" id="nutritionMeals">0</div>
-            <div class="nutrition-label" data-i18n="mealCount">прийомів їжі</div>
-          </div>
-          <div class="nutrition-card">
-            <div class="nutrition-value" id="nutritionFavorite">—</div>
-            <div class="nutrition-label" data-i18n="favoriteMeal">найчастіше</div>
-          </div>
-        </div>
-        <div class="category-chart-title" data-i18n="categoryBreakdown">Розподіл за категоріями</div>
-        <div class="category-chart" id="categoryChart" aria-label="Розподіл калорій за категоріями"></div>
-      </section>
-
-      <section class="nutrition-dashboard" aria-labelledby="dashboardTitle">
-        <div class="nutrition-title" id="dashboardTitle" data-i18n="dashboard">Дашборд</div>
-        <div class="nutrition-caption" id="dashboardCaption" data-i18n="dashboardToday">Дані за сьогодні</div>
-        <div class="stat-grid">
-          <div class="stat-card"><div class="stat-value" id="statAvg">0</div><div class="stat-label" data-i18n="average">середнє за день, ккал</div></div>
-          <div class="stat-card"><div class="stat-value gold" id="statStreak">0</div><div class="stat-label" data-i18n="streakLabel">днів поспіль у межах цілі</div></div>
-          <div class="stat-card"><div class="stat-value" id="statBest">—</div><div class="stat-label" data-i18n="bestDay">найкращий день</div></div>
-        </div>
-        <div class="chart-card">
-          <div class="chart-title" data-i18n="nutritionChart">Калорії за період</div>
-          <div class="chart-bars" id="chartBars"></div>
-        </div>
-      </section>
-
       <section class="facts" aria-labelledby="factsTitle">
         <div class="facts-title" id="factsTitle" data-i18n="factsTitle">10 фактів про харчування</div>
         <ol class="facts-list">
@@ -1837,19 +2376,6 @@
           </details>
         </div>
       </section>
-
-      <div class="profile-modal" id="profileModal" hidden>
-        <div class="profile-dialog" role="dialog" aria-modal="true" aria-labelledby="profileTitle">
-          <div class="profile-dialog-header">
-            <div>
-              <h2 id="profileTitle"></h2>
-              <div class="profile-rank" id="profileRank"></div>
-            </div>
-              <button class="profile-close" id="profileClose" type="button" data-i18n-aria="close" aria-label="Закрити">×</button>
-          </div>
-          <p class="profile-detail" id="profileDetail"></p>
-        </div>
-      </div>
     </section>
 
     <!-- TRAINING VIEW -->
@@ -1904,6 +2430,10 @@
 
     <section class="view" id="view-profile">
       <section class="profile-settings" aria-label="Профіль">
+        <div class="profile-account">
+          <span class="profile-account-email" id="profileAccountEmail"></span>
+          <button class="logout-btn" id="logoutBtn" type="button" data-i18n="logoutBtn">Вийти</button>
+        </div>
         <div class="profile-heading">
           <label class="profile-avatar-picker" data-i18n-aria="avatarLabel" aria-label="Додати фото аватара">
             <div class="profile-avatar" id="profileAvatar">?</div>
@@ -2065,6 +2595,31 @@
 
   </div>
 
+  <div class="splash-screen" id="splashScreen" hidden>
+    <button class="logo-badge logo-badge-lg" id="splashLogoBadge" type="button" data-i18n-aria="splashStart" aria-label="TrackTime — почати">
+      <svg class="logo-mark" viewBox="0 0 88 88" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="splashBadgeGrad" x1="16" y1="16" x2="72" y2="72" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="var(--accent)"/>
+            <stop offset="1" stop-color="var(--gold)"/>
+          </linearGradient>
+          <linearGradient id="splashRingGrad" x1="4" y1="4" x2="84" y2="84" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="var(--gold)"/>
+            <stop offset="1" stop-color="var(--accent)"/>
+          </linearGradient>
+        </defs>
+        <circle class="logo-ring" cx="44" cy="44" r="40" stroke-width="3" stroke-linecap="round" stroke-dasharray="185 67" style="stroke: url(#splashRingGrad);"/>
+        <rect class="logo-badge-bg" x="16" y="16" width="56" height="56" rx="18" style="fill: url(#splashBadgeGrad);"/>
+        <path class="logo-leaf" d="M44,28 C55,33 56,55 44,60 C32,55 33,33 44,28 Z"/>
+        <path class="logo-vein" d="M44,33 C41,40 41,48 44,55" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span class="logo-ping" aria-hidden="true"></span>
+      <span class="logo-spark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+    </button>
+    <div class="splash-name">TrackTime</div>
+    <div class="splash-tagline" data-i18n="tagline">Контролюй своє життя</div>
+  </div>
+
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
   <button class="chat-fab" id="chatFab" type="button" data-i18n-aria="chatOpen" aria-label="Чат з підтримкою">
@@ -2093,7 +2648,7 @@
   const STORAGE_KEY = 'calorie-tracker-v2';
   const translations = {
     uk: {
-      languageLabel: 'Мова', openSelect: 'Відкрити список', photoLabel: 'Додати фото', avatarLabel: 'Додати фото аватара', profile: 'Профіль', profileCaption: 'Твої особисті дані та показники', darkTheme: 'Темна тема', nameLabel: 'Ім’я', namePlaceholder: 'Наприклад, Олена', ageLabel: 'Вік', agePlaceholder: 'Років', heightLabel: 'Зріст, см', heightPlaceholder: 'Наприклад, 170', weightLabel: 'Вага, кг', weightPlaceholder: 'Наприклад, 70', bmiLabel: 'ІМТ', bmiCategoryLabel: 'Категорія ваги', bmiAdviceLabel: 'Орієнтовна оцінка за ІМТ', bmiUnderweight: 'Недостатня вага', bmiNormal: 'Норма', bmiOverweight: 'Надлишкова вага', bmiObesity1: 'Ожиріння I ст.', bmiObesity2: 'Ожиріння II ст.', bmiObesity3: 'Ожиріння III ст.', bmiNoData: 'Вкажи зріст і вагу', saveProfile: 'Зберегти профіль', profileSaved: 'Профіль збережено', editField: 'Редагувати', periodFilter: 'Період', categoryFilter: 'Категорія', periodToday: 'Сьогодні', periodWeek: 'Останні 7 днів', allCategories: 'Усі категорії', dashboard: 'Дашборд', dashboardToday: 'Дані за сьогодні', dashboardWeek: 'Дані за останні 7 днів', nutritionChart: 'Калорії за період', unit: 'ккал', currentUser: 'Ти', olena: 'Олена', andrii: 'Андрій', sofia: 'Софія', nutrition: 'Харчування', last7Nutrition: 'за останні 7 днів', weeklyKcal: 'всього ккал', mealCount: 'прийомів їжі', favoriteMeal: 'найчастіше', categoryBreakdown: 'Розподіл за категоріями', noCategoryData: 'Немає даних за цей період', factsTitle: '10 фактів про харчування', faqTitle: 'Часті запитання', faqQ1: 'Де зберігаються мої дані?', faqA1: 'Усі записи харчування, тренувань і профіль зберігаються локально в браузері — без реєстрації та серверів.', faqQ2: 'Чи синхронізуються дані між пристроями?', faqA2: "Ні, дані прив'язані до цього браузера на цьому пристрої. Якщо очистити кеш або відкрити застосунок на іншому пристрої, історія буде порожньою.", faqQ3: 'Як змінити денну ціль калорій?', faqA3: 'На вкладці «Харчування» натисни на значення цілі поруч із написом «ціль» і введи нове число — воно збережеться автоматично.', faqQ4: 'Як рахується ІМТ?', faqA4: 'Індекс маси тіла — це вага в кілограмах, поділена на зріст у метрах у квадраті. Вкажи зріст і вагу в профілі, щоб побачити результат.', faqQ5: 'Чи можна додати фото до страви або аватара?', faqA5: 'Так, натисни на іконку камери біля форми додавання їжі або на аватар у профілі, щоб завантажити фото з пристрою.', faqQ6: 'Як перемкнути мову чи темну тему?', faqA6: 'І мова, і темна тема перемикаються прямо в шапці застосунку — прапорцем і кнопкою з місяцем/сонцем поруч із ним.', training: 'Тренування', trainingCaption: 'Плануй активність на тиждень', trainingType: 'Тип тренування', unitLabel: 'Одиниця', quantity: 'Кількість', daysLabel: 'Дні', exercisesPlaceholder: 'Вправи: присідання, планка, віджимання...', notesPlaceholder: "Нотатка (необов'язково)", addTraining: 'Додати тренування', strength: 'Силове', cardio: 'Кардіо', yoga: 'Йога', stretching: 'Розтяжка', minutes: 'хв', sets: 'підх.', sessions: 'разів', mon: 'Пн', tue: 'Вт', wed: 'Ср', thu: 'Чт', fri: 'Пт', sat: 'Сб', sun: 'Нд', noTraining: 'Ще немає запланованих тренувань', exercisesLabel: 'Вправи', noteLabel: 'Нотатка', deleteTraining: 'Видалити тренування', confirmTitle: 'Змінити тип тренування?', confirmIncomplete: 'Поточне тренування ще не заповнене. Перейти до іншого типу?', confirmComplete: 'Поточне тренування заповнене. Додайте його перед переходом або продовжуйте без збереження.', confirmStay: 'Залишитися', confirmContinue: 'Так, продовжити', validation: 'Заповніть тип, виберіть хоча б один день, вкажіть кількість і додайте вправи.', noData: '—', appName: 'TrackTime', pageTitle: 'TrackTime — облік калорій', tagline: 'Проста фіксація їжі на день', today: 'Сьогодні', week: 'Тиждень', goal: 'ціль', chatOpen: 'Чат з підтримкою', chatTitle: 'Підтримка', chatStatus: 'Зазвичай відповідаємо швидко', chatPlaceholder: 'Напиши повідомлення...', chatSend: 'Надіслати', chatWelcome: 'Доброго дня! 👋 Менеджер підтримки скоро приєднається до чату.', programsNav: 'Програми', programsTitle: 'Програми тренувань від фахівців', programsCaption: 'Кожну програму індивідуально розписує сертифікований спеціаліст під твій рівень і ціль', programStrengthName: 'Силове тренування', programStrengthDesc: 'Персональний план силових тренувань з прогресією навантаження, розписаний тренером під твої цілі та обладнання.', programCardioName: 'Кардіо', programCardioDesc: 'Програма для витривалості та схуднення, яку спеціаліст адаптує під твій поточний рівень підготовки.', programYogaName: 'Йога', programYogaDesc: 'Індивідуальна послідовність асан і дихальних практик від інструктора з урахуванням твого рівня гнучкості.', programStretchingName: 'Розтяжка', programStretchingDesc: 'План розвитку гнучкості та мобільності суглобів, складений спеціалістом персонально для тебе.', programDiscount: '−30% для нових користувачів', programBuy: 'Купити програму', programBuyToast: 'Це демо-версія 🙂 Оплата поки не підключена — скоро можна буде купити програму тут.', nutritionPlansTitle: 'Плани харчування від дієтологів', nutritionPlansCaption: 'Кожен раціон індивідуально розписує дієтолог під твою ціль, вагу та спосіб життя', planMassName: 'Набір маси', planMassDesc: 'Раціон з профіцитом калорій і балансом БЖВ, складений дієтологом для якісного набору ваги без зайвого жиру.', planLossName: 'Схуднення', planLossDesc: 'Персональний план харчування з дефіцитом калорій, який враховує твої смаки, звички та спосіб життя.', planFatlossName: 'Скидання жиру', planFatlossDesc: "Раціон для зниження відсотка жиру зі збереженням м'язової маси, розписаний фахівцем з харчування.", planMuscleName: "Набір м'язів", planMuscleDesc: 'Високобілковий раціон для росту м\'язів, складений персонально під твої тренування та ціль.',
+      languageLabel: 'Мова', openSelect: 'Відкрити список', photoLabel: 'Додати фото', avatarLabel: 'Додати фото аватара', profile: 'Профіль', profileCaption: 'Твої особисті дані та показники', darkTheme: 'Темна тема', nameLabel: 'Ім’я', namePlaceholder: 'Наприклад, Олена', ageLabel: 'Вік', agePlaceholder: 'Років', heightLabel: 'Зріст, см', heightPlaceholder: 'Наприклад, 170', weightLabel: 'Вага, кг', weightPlaceholder: 'Наприклад, 70', bmiLabel: 'ІМТ', bmiCategoryLabel: 'Категорія ваги', bmiAdviceLabel: 'Орієнтовна оцінка за ІМТ', bmiUnderweight: 'Недостатня вага', bmiNormal: 'Норма', bmiOverweight: 'Надлишкова вага', bmiObesity1: 'Ожиріння I ст.', bmiObesity2: 'Ожиріння II ст.', bmiObesity3: 'Ожиріння III ст.', bmiNoData: 'Вкажи зріст і вагу', saveProfile: 'Зберегти профіль', profileSaved: 'Профіль збережено', editField: 'Редагувати', periodFilter: 'Період', categoryFilter: 'Категорія', periodToday: 'Сьогодні', periodWeek: 'Останні 7 днів', allCategories: 'Усі категорії', dashboard: 'Дашборд', dashboardToday: 'Дані за сьогодні', dashboardWeek: 'Дані за останні 7 днів', nutritionChart: 'Калорії за період', unit: 'ккал', currentUser: 'Ти', olena: 'Олена', andrii: 'Андрій', sofia: 'Софія', nutrition: 'Харчування', last7Nutrition: 'за останні 7 днів', weeklyKcal: 'всього ккал', mealCount: 'прийомів їжі', favoriteMeal: 'найчастіше', categoryBreakdown: 'Розподіл за категоріями', noCategoryData: 'Немає даних за цей період', factsTitle: '10 фактів про харчування', faqTitle: 'Часті запитання', faqQ1: 'Де зберігаються мої дані?', faqA1: 'Усі записи харчування, тренувань і профіль зберігаються локально в браузері й прив’язані до твого акаунта — без зовнішніх серверів.', faqQ2: 'Чи синхронізуються дані між пристроями?', faqA2: "Ні, акаунти та дані прив'язані до цього браузера на цьому пристрої. Якщо очистити кеш або відкрити застосунок на іншому пристрої, доведеться зареєструватися знову і історія буде порожньою.", faqQ3: 'Як змінити денну ціль калорій?', faqA3: 'На вкладці «Харчування» натисни на значення цілі поруч із написом «ціль» і введи нове число — воно збережеться автоматично.', faqQ4: 'Як рахується ІМТ?', faqA4: 'Індекс маси тіла — це вага в кілограмах, поділена на зріст у метрах у квадраті. Вкажи зріст і вагу в профілі, щоб побачити результат.', faqQ5: 'Чи можна додати фото до страви або аватара?', faqA5: 'Так, натисни на іконку камери біля форми додавання їжі або на аватар у профілі, щоб завантажити фото з пристрою.', faqQ6: 'Як перемкнути мову чи темну тему?', faqA6: 'І мова, і темна тема перемикаються прямо в шапці застосунку — прапорцем і кнопкою з місяцем/сонцем поруч із ним.', training: 'Тренування', trainingCaption: 'Плануй активність на тиждень', trainingType: 'Тип тренування', unitLabel: 'Одиниця', quantity: 'Кількість', daysLabel: 'Дні', exercisesPlaceholder: 'Вправи: присідання, планка, віджимання...', notesPlaceholder: "Нотатка (необов'язково)", addTraining: 'Додати тренування', strength: 'Силове', cardio: 'Кардіо', yoga: 'Йога', stretching: 'Розтяжка', minutes: 'хв', sets: 'підх.', sessions: 'разів', mon: 'Пн', tue: 'Вт', wed: 'Ср', thu: 'Чт', fri: 'Пт', sat: 'Сб', sun: 'Нд', noTraining: 'Ще немає запланованих тренувань', exercisesLabel: 'Вправи', noteLabel: 'Нотатка', deleteTraining: 'Видалити тренування', confirmTitle: 'Змінити тип тренування?', confirmIncomplete: 'Поточне тренування ще не заповнене. Перейти до іншого типу?', confirmComplete: 'Поточне тренування заповнене. Додайте його перед переходом або продовжуйте без збереження.', confirmStay: 'Залишитися', confirmContinue: 'Так, продовжити', validation: 'Заповніть тип, виберіть хоча б один день, вкажіть кількість і додайте вправи.', noData: '—', appName: 'TrackTime', pageTitle: 'TrackTime — облік калорій', tagline: 'Контролюй своє життя', today: 'Сьогодні', week: 'Тиждень', goal: 'ціль', chatOpen: 'Чат з підтримкою', chatTitle: 'Підтримка', chatStatus: 'Зазвичай відповідаємо швидко', chatPlaceholder: 'Напиши повідомлення...', chatSend: 'Надіслати', chatWelcome: 'Доброго дня! 👋 Менеджер підтримки скоро приєднається до чату.', programsNav: 'Програми', programsTitle: 'Програми тренувань від фахівців', programsCaption: 'Кожну програму індивідуально розписує сертифікований спеціаліст під твій рівень і ціль', programStrengthName: 'Силове тренування', programStrengthDesc: 'Персональний план силових тренувань з прогресією навантаження, розписаний тренером під твої цілі та обладнання.', programCardioName: 'Кардіо', programCardioDesc: 'Програма для витривалості та схуднення, яку спеціаліст адаптує під твій поточний рівень підготовки.', programYogaName: 'Йога', programYogaDesc: 'Індивідуальна послідовність асан і дихальних практик від інструктора з урахуванням твого рівня гнучкості.', programStretchingName: 'Розтяжка', programStretchingDesc: 'План розвитку гнучкості та мобільності суглобів, складений спеціалістом персонально для тебе.', programDiscount: '−30% для нових користувачів', programBuy: 'Купити програму', programBuyToast: 'Це демо-версія 🙂 Оплата поки не підключена — скоро можна буде купити програму тут.', nutritionPlansTitle: 'Плани харчування від дієтологів', nutritionPlansCaption: 'Кожен раціон індивідуально розписує дієтолог під твою ціль, вагу та спосіб життя', planMassName: 'Набір маси', planMassDesc: 'Раціон з профіцитом калорій і балансом БЖВ, складений дієтологом для якісного набору ваги без зайвого жиру.', planLossName: 'Схуднення', planLossDesc: 'Персональний план харчування з дефіцитом калорій, який враховує твої смаки, звички та спосіб життя.', planFatlossName: 'Скидання жиру', planFatlossDesc: "Раціон для зниження відсотка жиру зі збереженням м'язової маси, розписаний фахівцем з харчування.", planMuscleName: "Набір м'язів", planMuscleDesc: 'Високобілковий раціон для росту м\'язів, складений персонально під твої тренування та ціль.',
       foodPlaceholder: "Що з'їли?", chooseDish: 'Оберіть...', categoryLabel: 'Категорія прийому їжі', breakfast: 'Сніданок',
       lunch: 'Обід', dinner: 'Вечеря', snack: 'Перекус', record: 'Записати', todayEntries: 'Сьогоднішні записи',
       resetToday: 'Скинути сьогоднішній день', leaderboard: 'Лідерборд', thisWeek: 'цього тижня',
@@ -2101,10 +2656,11 @@
       last7: 'Останні 7 днів', remaining: 'ккал залишилось на сьогодні', over: 'ккал понад ціль на сьогодні',
       consumed: "з'їдено", empty: "Ще нічого не додано — почни зі сніданку чи перекусу", delete: 'Видалити запис',
       close: 'Закрити', place: 'місце в лідерборді', days: 'днів', currentProfile: 'Твоя поточна серія в межах тижневої цілі.',
-      otherProfile: 'Стабільний тиждень у межах особистої калорійної цілі', other: 'Інше', profileOpen: 'Відкрити профіль'
+      otherProfile: 'Стабільний тиждень у межах особистої калорійної цілі', other: 'Інше', profileOpen: 'Відкрити профіль',
+      loginTab: 'Вхід', registerTab: 'Реєстрація', emailLabel: 'Email', emailPlaceholder: 'you@example.com', passwordLabel: 'Пароль', confirmPasswordLabel: 'Підтвердження пароля', loginSubmit: 'Увійти', registerSubmit: 'Зареєструватися', logoutBtn: 'Вийти', loggedOut: 'Ти вийшов з акаунта', registerSuccess: 'Акаунт створено', nameRequiredError: "Вкажи ім'я (мінімум 2 символи)", emailRequiredError: 'Вкажи email', emailInvalidError: 'Введи коректний email', emailTakenError: 'Акаунт з таким email вже існує', passwordRequiredError: 'Вкажи пароль', passwordShortError: 'Пароль має містити щонайменше 6 символів', confirmRequiredError: 'Підтверди пароль', confirmMismatchError: 'Паролі не збігаються', loginInvalidError: 'Невірний email або пароль', splashStart: 'TrackTime — почати', splashBack: 'TrackTime — подвійний клік, щоб повернутися на початок'
     },
     en: {
-      languageLabel: 'Language', openSelect: 'Open list', photoLabel: 'Add photo', avatarLabel: 'Add avatar photo', profile: 'Profile', profileCaption: 'Your personal details and metrics', darkTheme: 'Dark theme', nameLabel: 'Name', namePlaceholder: 'For example, Olena', ageLabel: 'Age', agePlaceholder: 'Years', heightLabel: 'Height, cm', heightPlaceholder: 'For example, 170', weightLabel: 'Weight, kg', weightPlaceholder: 'For example, 70', bmiLabel: 'BMI', bmiCategoryLabel: 'Weight category', bmiAdviceLabel: 'Estimated BMI assessment', bmiUnderweight: 'Underweight', bmiNormal: 'Normal range', bmiOverweight: 'Overweight', bmiObesity1: 'Obesity class I', bmiObesity2: 'Obesity class II', bmiObesity3: 'Obesity class III', bmiNoData: 'Enter height and weight', saveProfile: 'Save profile', profileSaved: 'Profile saved', editField: 'Edit', periodFilter: 'Period', categoryFilter: 'Category', periodToday: 'Today', periodWeek: 'Last 7 days', allCategories: 'All categories', dashboard: 'Dashboard', dashboardToday: 'Data for today', dashboardWeek: 'Data for the last 7 days', nutritionChart: 'Calories for the period', unit: 'kcal', currentUser: 'You', olena: 'Olena', andrii: 'Andrii', sofia: 'Sofia', nutrition: 'Nutrition', last7Nutrition: 'over the last 7 days', weeklyKcal: 'total kcal', mealCount: 'meals logged', favoriteMeal: 'most frequent', categoryBreakdown: 'Breakdown by category', noCategoryData: 'No data for this period', factsTitle: '10 food facts', faqTitle: 'Frequently asked questions', faqQ1: 'Where is my data stored?', faqA1: 'All your food entries, workouts, and profile are stored locally in your browser — no sign-up or servers involved.', faqQ2: 'Does data sync between devices?', faqA2: "No, data is tied to this browser on this device. Clearing your cache or opening the app on another device will show an empty history.", faqQ3: 'How do I change my daily calorie goal?', faqA3: 'On the Nutrition tab, tap the goal value next to the "goal" label and enter a new number — it saves automatically.', faqQ4: 'How is BMI calculated?', faqA4: 'Body mass index is your weight in kilograms divided by your height in meters squared. Enter your height and weight in your profile to see the result.', faqQ5: 'Can I add a photo to a meal or my avatar?', faqA5: 'Yes, tap the camera icon next to the food entry form or your avatar in the profile to upload a photo from your device.', faqQ6: 'How do I switch the language or dark theme?', faqA6: 'Both the language and dark theme switch right in the header — the flag selector and the sun/moon button next to it.', training: 'Workouts', trainingCaption: 'Plan your weekly activity', trainingType: 'Workout type', unitLabel: 'Unit', quantity: 'Quantity', daysLabel: 'Days', exercisesPlaceholder: 'Exercises: squats, plank, push-ups...', notesPlaceholder: 'Note (optional)', addTraining: 'Add workout', strength: 'Strength', cardio: 'Cardio', yoga: 'Yoga', stretching: 'Stretching', minutes: 'min', sets: 'sets', sessions: 'times', mon: 'Mon', tue: 'Tue', wed: 'Wed', thu: 'Thu', fri: 'Fri', sat: 'Sat', sun: 'Sun', noTraining: 'No workouts planned yet', exercisesLabel: 'Exercises', noteLabel: 'Note', deleteTraining: 'Delete workout', confirmTitle: 'Change workout type?', confirmIncomplete: 'The current workout is incomplete. Switch to another type?', confirmComplete: 'The current workout is complete. Add it before switching or continue without saving.', confirmStay: 'Stay here', confirmContinue: 'Yes, continue', validation: 'Choose a day, enter a quantity, and add exercises before saving.', noData: '—', appName: 'TrackTime', pageTitle: 'TrackTime — calorie tracking', tagline: 'Simple daily food tracking', today: 'Today', week: 'Week', goal: 'goal', chatOpen: 'Chat with support', chatTitle: 'Support', chatStatus: 'We usually reply quickly', chatPlaceholder: 'Type a message...', chatSend: 'Send', chatWelcome: "Hi there! 👋 A support manager will join the chat shortly.", programsNav: 'Programs', programsTitle: 'Training programs by specialists', programsCaption: 'Each program is individually written by a certified specialist for your level and goal', programStrengthName: 'Strength training', programStrengthDesc: 'A personal strength program with progressive overload, built by a coach around your goals and equipment.', programCardioName: 'Cardio', programCardioDesc: 'An endurance and weight-loss program that a specialist adapts to your current fitness level.', programYogaName: 'Yoga', programYogaDesc: 'An individual sequence of poses and breathing practices from an instructor, matched to your flexibility level.', programStretchingName: 'Stretching', programStretchingDesc: 'A mobility and flexibility plan built personally for you by a specialist.', programDiscount: '−30% for new users', programBuy: 'Buy program', programBuyToast: "This is a demo 🙂 Payments aren't connected yet — you'll be able to buy the program here soon.", nutritionPlansTitle: 'Nutrition plans by dietitians', nutritionPlansCaption: 'Each meal plan is individually written by a dietitian for your goal, weight, and lifestyle', planMassName: 'Mass gain', planMassDesc: 'A calorie-surplus diet with a balanced macro split, built by a dietitian for clean weight gain without excess fat.', planLossName: 'Weight loss', planLossDesc: 'A personal calorie-deficit meal plan that takes your taste, habits, and lifestyle into account.', planFatlossName: 'Fat loss', planFatlossDesc: 'A diet for lowering body fat percentage while preserving muscle mass, written by a nutrition specialist.', planMuscleName: 'Muscle gain', planMuscleDesc: 'A high-protein diet for muscle growth, built personally around your training and goal.',
+      languageLabel: 'Language', openSelect: 'Open list', photoLabel: 'Add photo', avatarLabel: 'Add avatar photo', profile: 'Profile', profileCaption: 'Your personal details and metrics', darkTheme: 'Dark theme', nameLabel: 'Name', namePlaceholder: 'For example, Olena', ageLabel: 'Age', agePlaceholder: 'Years', heightLabel: 'Height, cm', heightPlaceholder: 'For example, 170', weightLabel: 'Weight, kg', weightPlaceholder: 'For example, 70', bmiLabel: 'BMI', bmiCategoryLabel: 'Weight category', bmiAdviceLabel: 'Estimated BMI assessment', bmiUnderweight: 'Underweight', bmiNormal: 'Normal range', bmiOverweight: 'Overweight', bmiObesity1: 'Obesity class I', bmiObesity2: 'Obesity class II', bmiObesity3: 'Obesity class III', bmiNoData: 'Enter height and weight', saveProfile: 'Save profile', profileSaved: 'Profile saved', editField: 'Edit', periodFilter: 'Period', categoryFilter: 'Category', periodToday: 'Today', periodWeek: 'Last 7 days', allCategories: 'All categories', dashboard: 'Dashboard', dashboardToday: 'Data for today', dashboardWeek: 'Data for the last 7 days', nutritionChart: 'Calories for the period', unit: 'kcal', currentUser: 'You', olena: 'Olena', andrii: 'Andrii', sofia: 'Sofia', nutrition: 'Nutrition', last7Nutrition: 'over the last 7 days', weeklyKcal: 'total kcal', mealCount: 'meals logged', favoriteMeal: 'most frequent', categoryBreakdown: 'Breakdown by category', noCategoryData: 'No data for this period', factsTitle: '10 food facts', faqTitle: 'Frequently asked questions', faqQ1: 'Where is my data stored?', faqA1: 'All your food entries, workouts, and profile are stored locally in your browser and tied to your account — no external servers involved.', faqQ2: 'Does data sync between devices?', faqA2: "No, accounts and data are tied to this browser on this device. Clearing your cache or opening the app on another device means signing up again with an empty history.", faqQ3: 'How do I change my daily calorie goal?', faqA3: 'On the Nutrition tab, tap the goal value next to the "goal" label and enter a new number — it saves automatically.', faqQ4: 'How is BMI calculated?', faqA4: 'Body mass index is your weight in kilograms divided by your height in meters squared. Enter your height and weight in your profile to see the result.', faqQ5: 'Can I add a photo to a meal or my avatar?', faqA5: 'Yes, tap the camera icon next to the food entry form or your avatar in the profile to upload a photo from your device.', faqQ6: 'How do I switch the language or dark theme?', faqA6: 'Both the language and dark theme switch right in the header — the flag selector and the sun/moon button next to it.', training: 'Workouts', trainingCaption: 'Plan your weekly activity', trainingType: 'Workout type', unitLabel: 'Unit', quantity: 'Quantity', daysLabel: 'Days', exercisesPlaceholder: 'Exercises: squats, plank, push-ups...', notesPlaceholder: 'Note (optional)', addTraining: 'Add workout', strength: 'Strength', cardio: 'Cardio', yoga: 'Yoga', stretching: 'Stretching', minutes: 'min', sets: 'sets', sessions: 'times', mon: 'Mon', tue: 'Tue', wed: 'Wed', thu: 'Thu', fri: 'Fri', sat: 'Sat', sun: 'Sun', noTraining: 'No workouts planned yet', exercisesLabel: 'Exercises', noteLabel: 'Note', deleteTraining: 'Delete workout', confirmTitle: 'Change workout type?', confirmIncomplete: 'The current workout is incomplete. Switch to another type?', confirmComplete: 'The current workout is complete. Add it before switching or continue without saving.', confirmStay: 'Stay here', confirmContinue: 'Yes, continue', validation: 'Choose a day, enter a quantity, and add exercises before saving.', noData: '—', appName: 'TrackTime', pageTitle: 'TrackTime — calorie tracking', tagline: 'Take control of your life', today: 'Today', week: 'Week', goal: 'goal', chatOpen: 'Chat with support', chatTitle: 'Support', chatStatus: 'We usually reply quickly', chatPlaceholder: 'Type a message...', chatSend: 'Send', chatWelcome: "Hi there! 👋 A support manager will join the chat shortly.", programsNav: 'Programs', programsTitle: 'Training programs by specialists', programsCaption: 'Each program is individually written by a certified specialist for your level and goal', programStrengthName: 'Strength training', programStrengthDesc: 'A personal strength program with progressive overload, built by a coach around your goals and equipment.', programCardioName: 'Cardio', programCardioDesc: 'An endurance and weight-loss program that a specialist adapts to your current fitness level.', programYogaName: 'Yoga', programYogaDesc: 'An individual sequence of poses and breathing practices from an instructor, matched to your flexibility level.', programStretchingName: 'Stretching', programStretchingDesc: 'A mobility and flexibility plan built personally for you by a specialist.', programDiscount: '−30% for new users', programBuy: 'Buy program', programBuyToast: "This is a demo 🙂 Payments aren't connected yet — you'll be able to buy the program here soon.", nutritionPlansTitle: 'Nutrition plans by dietitians', nutritionPlansCaption: 'Each meal plan is individually written by a dietitian for your goal, weight, and lifestyle', planMassName: 'Mass gain', planMassDesc: 'A calorie-surplus diet with a balanced macro split, built by a dietitian for clean weight gain without excess fat.', planLossName: 'Weight loss', planLossDesc: 'A personal calorie-deficit meal plan that takes your taste, habits, and lifestyle into account.', planFatlossName: 'Fat loss', planFatlossDesc: 'A diet for lowering body fat percentage while preserving muscle mass, written by a nutrition specialist.', planMuscleName: 'Muscle gain', planMuscleDesc: 'A high-protein diet for muscle growth, built personally around your training and goal.',
       foodPlaceholder: 'What did you eat?', chooseDish: 'Choose...', categoryLabel: 'Meal category', breakfast: 'Breakfast',
       lunch: 'Lunch', dinner: 'Dinner', snack: 'Snack', record: 'Log food', todayEntries: "Today's entries",
       resetToday: 'Reset today', leaderboard: 'Leaderboard', thisWeek: 'this week', average: 'daily average, kcal',
@@ -2112,7 +2668,8 @@
       over: 'kcal over today\'s goal', consumed: 'consumed', empty: 'Nothing logged yet — start with breakfast or a snack',
       delete: 'Delete entry', close: 'Close', place: 'place on the leaderboard', days: 'days',
       currentProfile: 'Your current streak within this week\'s goal.',
-      otherProfile: 'A consistent week within a personal calorie goal', other: 'Other', profileOpen: 'Open profile'
+      otherProfile: 'A consistent week within a personal calorie goal', other: 'Other', profileOpen: 'Open profile',
+      loginTab: 'Log in', registerTab: 'Sign up', emailLabel: 'Email', emailPlaceholder: 'you@example.com', passwordLabel: 'Password', confirmPasswordLabel: 'Confirm password', loginSubmit: 'Log in', registerSubmit: 'Sign up', logoutBtn: 'Log out', loggedOut: 'You have been logged out', registerSuccess: 'Account created', nameRequiredError: 'Enter your name (at least 2 characters)', emailRequiredError: 'Enter your email', emailInvalidError: 'Enter a valid email', emailTakenError: 'An account with this email already exists', passwordRequiredError: 'Enter a password', passwordShortError: 'Password must be at least 6 characters', confirmRequiredError: 'Confirm your password', confirmMismatchError: 'Passwords do not match', loginInvalidError: 'Invalid email or password', splashStart: 'TrackTime — start', splashBack: 'TrackTime — double-click to go back to the start'
     }
   };
 
@@ -2123,9 +2680,17 @@
     return dateKey(new Date());
   }
 
-  function loadState() {
+  function defaultState() {
+    return { goal: 2000, history: {}, language: 'uk', training: [], profile: {}, theme: 'light', chat: [] };
+  }
+
+  function stateKeyFor(email) {
+    return STORAGE_KEY + ':' + email;
+  }
+
+  function loadState(email) {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = localStorage.getItem(stateKeyFor(email));
       if (raw) {
         const parsed = JSON.parse(raw);
         return {
@@ -2141,18 +2706,52 @@
     } catch (e) {
       console.warn('Storage read failed', e);
     }
-    return { goal: 2000, history: {}, language: 'uk', training: [], profile: {}, theme: 'light', chat: [] };
+    return defaultState();
   }
 
   function saveState(state) {
+    if (!auth.session) return;
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      localStorage.setItem(stateKeyFor(auth.session), JSON.stringify(state));
     } catch (e) {
       console.warn('Storage write failed', e);
     }
   }
 
-  let state = loadState();
+  const AUTH_STORAGE_KEY = 'calorie-tracker-auth-v1';
+
+  function loadAuth() {
+    try {
+      const raw = localStorage.getItem(AUTH_STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        return {
+          users: Array.isArray(parsed.users) ? parsed.users : [],
+          session: typeof parsed.session === 'string' ? parsed.session : null
+        };
+      }
+    } catch (e) {
+      console.warn('Auth storage read failed', e);
+    }
+    return { users: [], session: null };
+  }
+
+  function saveAuth(auth) {
+    try {
+      localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(auth));
+    } catch (e) {
+      console.warn('Auth storage write failed', e);
+    }
+  }
+
+  async function hashPassword(password) {
+    const bytes = new TextEncoder().encode(password);
+    const digest = await crypto.subtle.digest('SHA-256', bytes);
+    return Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  let auth = loadAuth();
+  let state = auth.session ? loadState(auth.session) : defaultState();
 
   function seedDemoNutritionData() {
     const demoMeals = {
@@ -2189,7 +2788,7 @@
     });
   }
 
-  if (Object.keys(state.history).length === 0) {
+  if (auth.session && Object.keys(state.history).length === 0) {
     seedDemoNutritionData();
     saveState(state);
   }
@@ -2298,8 +2897,33 @@
   const bmiValue = document.getElementById('bmiValue');
   const bmiCategory = document.getElementById('bmiCategory');
   const bmiAdvice = document.getElementById('bmiAdvice');
+  const appShell = document.getElementById('appShell');
+  const authScreen = document.getElementById('authScreen');
+  const logoBadge = document.getElementById('logoBadge');
+  const splashScreen = document.getElementById('splashScreen');
+  const splashLogoBadge = document.getElementById('splashLogoBadge');
+  const authTabBtns = document.querySelectorAll('.auth-tab-btn');
+  const loginForm = document.getElementById('loginForm');
+  const loginEmail = document.getElementById('loginEmail');
+  const loginPassword = document.getElementById('loginPassword');
+  const loginEmailError = document.getElementById('loginEmailError');
+  const loginPasswordError = document.getElementById('loginPasswordError');
+  const loginFormError = document.getElementById('loginFormError');
+  const registerForm = document.getElementById('registerForm');
+  const registerName = document.getElementById('registerName');
+  const registerEmail = document.getElementById('registerEmail');
+  const registerPassword = document.getElementById('registerPassword');
+  const registerConfirm = document.getElementById('registerConfirm');
+  const registerNameError = document.getElementById('registerNameError');
+  const registerEmailError = document.getElementById('registerEmailError');
+  const registerPasswordError = document.getElementById('registerPasswordError');
+  const registerConfirmError = document.getElementById('registerConfirmError');
+  const registerFormError = document.getElementById('registerFormError');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const profileAccountEmail = document.getElementById('profileAccountEmail');
   const tabBtns = document.querySelectorAll('.tab-btn');
   const views = {
+    dashboard: document.getElementById('view-dashboard'),
     nutrition: document.getElementById('view-nutrition'),
     training: document.getElementById('view-training'),
     profile: document.getElementById('view-profile'),
@@ -2315,7 +2939,7 @@
   function applyTheme() {
     const isDark = state.theme === 'dark';
     document.documentElement.dataset.theme = isDark ? 'dark' : 'light';
-    themeFab.querySelector('span').textContent = isDark ? '☀️' : '🌙';
+    themeFab.setAttribute('aria-checked', String(isDark));
   }
 
   function renderToday() {
@@ -2722,6 +3346,7 @@
   }
 
   function renderProfile() {
+    profileAccountEmail.textContent = auth.session || '';
     const profile = state.profile || {};
     if (!profileFormDirty) {
       profileName.value = profile.name || '';
@@ -3073,6 +3698,14 @@
     state.theme = state.theme === 'dark' ? 'light' : 'dark';
     saveState(state);
     applyTheme();
+    themeFab.classList.remove('is-bursting');
+    void themeFab.offsetWidth;
+    themeFab.classList.add('is-bursting');
+  });
+  themeFab.addEventListener('animationend', (ev) => {
+    if (ev.target.classList.contains('theme-toggle-glow')) {
+      themeFab.classList.remove('is-bursting');
+    }
   });
 
   nutritionPeriod.addEventListener('change', renderAll);
@@ -3135,16 +3768,244 @@
     showToast(t('profileSaved'));
   });
 
+  function showMainTab(tab) {
+    tabBtns.forEach((btn) => btn.classList.toggle('active', btn.dataset.tab === tab));
+    Object.entries(views).forEach(([key, view]) => view.classList.toggle('active', key === tab));
+  }
+
   tabBtns.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      tabBtns.forEach((b) => b.classList.remove('active'));
-      btn.classList.add('active');
-      Object.values(views).forEach((v) => v.classList.remove('active'));
-      views[btn.dataset.tab].classList.add('active');
+    btn.addEventListener('click', () => showMainTab(btn.dataset.tab));
+  });
+
+  // --- auth ---
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const PASSWORD_MIN_LEN = 6;
+
+  function setFieldError(inputEl, errorEl, message) {
+    if (message) {
+      inputEl.classList.add('invalid');
+      errorEl.textContent = message;
+      errorEl.classList.add('visible');
+    } else {
+      inputEl.classList.remove('invalid');
+      errorEl.textContent = '';
+      errorEl.classList.remove('visible');
+    }
+  }
+
+  function setFormError(errorEl, message) {
+    if (message) {
+      errorEl.textContent = message;
+      errorEl.classList.add('visible');
+    } else {
+      errorEl.textContent = '';
+      errorEl.classList.remove('visible');
+    }
+  }
+
+  function resetAuthForms() {
+    loginForm.reset();
+    registerForm.reset();
+    [loginEmailError, loginPasswordError, loginFormError, registerNameError, registerEmailError, registerPasswordError, registerConfirmError, registerFormError]
+      .forEach((el) => setFormError(el, ''));
+    [loginEmail, loginPassword, registerName, registerEmail, registerPassword, registerConfirm]
+      .forEach((el) => el.classList.remove('invalid'));
+  }
+
+  function showAuthTab(tab) {
+    authTabBtns.forEach((btn) => btn.classList.toggle('active', btn.dataset.authTab === tab));
+    loginForm.hidden = tab !== 'login';
+    registerForm.hidden = tab !== 'register';
+  }
+
+  let authStage = 'splash';
+  const prefersReducedMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  function onceAnimationEnd(el, cb) {
+    if (prefersReducedMotion) { cb(); return; }
+    function handler(ev) {
+      if (ev.target !== el) return;
+      el.removeEventListener('animationend', handler);
+      cb();
+    }
+    el.addEventListener('animationend', handler);
+  }
+
+  function updateAuthVisibility() {
+    const loggedIn = !!auth.session;
+    if (loggedIn) {
+      splashScreen.hidden = true;
+      splashScreen.classList.remove('is-leaving', 'is-entering');
+      authScreen.hidden = true;
+      authScreen.classList.remove('is-leaving', 'is-entering');
+      appShell.hidden = false;
+      chatFab.hidden = false;
+      return;
+    }
+    appShell.hidden = true;
+    chatFab.hidden = true;
+    chatPanel.hidden = true;
+    if (authStage === 'splash') {
+      authScreen.hidden = true;
+      splashScreen.hidden = false;
+    } else {
+      splashScreen.hidden = true;
+      authScreen.hidden = false;
+    }
+  }
+
+  function goToLogin() {
+    if (auth.session || authStage !== 'splash') return;
+    splashScreen.classList.add('is-leaving');
+    onceAnimationEnd(splashScreen, () => {
+      splashScreen.classList.remove('is-leaving');
+      authStage = 'login';
+      updateAuthVisibility();
+      authScreen.classList.add('is-entering');
+      onceAnimationEnd(authScreen, () => authScreen.classList.remove('is-entering'));
+    });
+  }
+
+  function goToSplash() {
+    if (auth.session || authStage !== 'login') return;
+    authScreen.classList.add('is-leaving');
+    onceAnimationEnd(authScreen, () => {
+      authScreen.classList.remove('is-leaving');
+      authStage = 'splash';
+      updateAuthVisibility();
+      splashScreen.classList.add('is-entering');
+      onceAnimationEnd(splashScreen, () => splashScreen.classList.remove('is-entering'));
+    });
+  }
+
+  function finishAuth() {
+    saveAuth(auth);
+    profileFormDirty = false;
+    unlockedProfileFields.clear();
+    pendingAvatarUrl = '';
+    resetAuthForms();
+    showAuthTab('login');
+    showMainTab('dashboard');
+    renderAll();
+    updateAuthVisibility();
+  }
+
+  authTabBtns.forEach((btn) => {
+    btn.addEventListener('click', () => showAuthTab(btn.dataset.authTab));
+  });
+
+  function triggerLogoBurst(badge) {
+    badge.classList.remove('is-bursting');
+    void badge.offsetWidth;
+    badge.classList.add('is-bursting');
+  }
+
+  [logoBadge, splashLogoBadge].forEach((badge) => {
+    badge.addEventListener('animationend', (ev) => {
+      if (ev.target === badge.querySelector('.logo-mark')) {
+        badge.classList.remove('is-bursting');
+      }
     });
   });
 
+  logoBadge.addEventListener('click', () => triggerLogoBurst(logoBadge));
+  logoBadge.addEventListener('dblclick', () => {
+    triggerLogoBurst(logoBadge);
+    goToSplash();
+  });
+
+  splashLogoBadge.addEventListener('click', () => {
+    triggerLogoBurst(splashLogoBadge);
+    goToLogin();
+  });
+
+  loginForm.addEventListener('submit', async function (ev) {
+    ev.preventDefault();
+    const email = loginEmail.value.trim().toLowerCase();
+    const password = loginPassword.value;
+    let valid = true;
+
+    if (!email) { setFieldError(loginEmail, loginEmailError, t('emailRequiredError')); valid = false; }
+    else if (!EMAIL_RE.test(email)) { setFieldError(loginEmail, loginEmailError, t('emailInvalidError')); valid = false; }
+    else { setFieldError(loginEmail, loginEmailError, ''); }
+
+    if (!password) { setFieldError(loginPassword, loginPasswordError, t('passwordRequiredError')); valid = false; }
+    else { setFieldError(loginPassword, loginPasswordError, ''); }
+
+    setFormError(loginFormError, '');
+    if (!valid) return;
+
+    const user = auth.users.find((u) => u.email === email);
+    const passwordHash = await hashPassword(password);
+    if (!user || user.passwordHash !== passwordHash) {
+      setFormError(loginFormError, t('loginInvalidError'));
+      return;
+    }
+
+    auth.session = email;
+    state = loadState(email);
+    if (Object.keys(state.history).length === 0) {
+      seedDemoNutritionData();
+      saveState(state);
+    }
+    finishAuth();
+  });
+
+  registerForm.addEventListener('submit', async function (ev) {
+    ev.preventDefault();
+    const name = registerName.value.trim();
+    const email = registerEmail.value.trim().toLowerCase();
+    const password = registerPassword.value;
+    const confirm = registerConfirm.value;
+    let valid = true;
+
+    if (!name || name.length < 2) { setFieldError(registerName, registerNameError, t('nameRequiredError')); valid = false; }
+    else { setFieldError(registerName, registerNameError, ''); }
+
+    if (!email) { setFieldError(registerEmail, registerEmailError, t('emailRequiredError')); valid = false; }
+    else if (!EMAIL_RE.test(email)) { setFieldError(registerEmail, registerEmailError, t('emailInvalidError')); valid = false; }
+    else if (auth.users.some((u) => u.email === email)) { setFieldError(registerEmail, registerEmailError, t('emailTakenError')); valid = false; }
+    else { setFieldError(registerEmail, registerEmailError, ''); }
+
+    if (!password) { setFieldError(registerPassword, registerPasswordError, t('passwordRequiredError')); valid = false; }
+    else if (password.length < PASSWORD_MIN_LEN) { setFieldError(registerPassword, registerPasswordError, t('passwordShortError')); valid = false; }
+    else { setFieldError(registerPassword, registerPasswordError, ''); }
+
+    if (!confirm) { setFieldError(registerConfirm, registerConfirmError, t('confirmRequiredError')); valid = false; }
+    else if (confirm !== password) { setFieldError(registerConfirm, registerConfirmError, t('confirmMismatchError')); valid = false; }
+    else { setFieldError(registerConfirm, registerConfirmError, ''); }
+
+    setFormError(registerFormError, '');
+    if (!valid) return;
+
+    const passwordHash = await hashPassword(password);
+    auth.users.push({ email, name, passwordHash });
+    auth.session = email;
+    const prevLanguage = state.language;
+    const prevTheme = state.theme;
+    state = defaultState();
+    state.language = prevLanguage;
+    state.theme = prevTheme;
+    state.profile = { name, age: '', height: '', weight: '', avatar: '' };
+    seedDemoNutritionData();
+    saveState(state);
+    finishAuth();
+    showToast(t('registerSuccess'));
+  });
+
+  logoutBtn.addEventListener('click', () => {
+    auth.session = null;
+    saveAuth(auth);
+    authStage = 'login';
+    showAuthTab('login');
+    resetAuthForms();
+    updateAuthVisibility();
+    showToast(t('loggedOut'));
+  });
+
+  showMainTab('dashboard');
   renderAll();
+  updateAuthVisibility();
 })();
 </script>
 </body>
