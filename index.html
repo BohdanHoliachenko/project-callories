@@ -3636,6 +3636,7 @@
     .cw-chips::-webkit-scrollbar { display: none; }
     .cw-chip { flex: none; white-space: nowrap; }
   }
+  .sheets-sync[hidden] { display: none; }
 </style>
 </head>
 <body>
@@ -4139,7 +4140,7 @@
           </div>
           <button class="profile-save" id="profileSaveBtn" type="submit" data-i18n="saveProfile">Зберегти профіль</button>
         </form>
-        <div class="sheets-sync">
+        <div class="sheets-sync" id="sheetsSyncBlock" hidden>
           <div class="sheets-sync-title" data-i18n="sheetsSyncTitle">Синхронізація з Google Таблицею</div>
           <div class="sheets-sync-caption" data-i18n="sheetsSyncCaption">Вкажи URL розгорнутого Apps Script, щоб зберігати копію даних (харчування, тренування, профіль) у Google Таблиці. Фото не синхронізуються.</div>
           <div class="sheets-sync-row">
@@ -4498,6 +4499,15 @@
   }
   let sheetsUrl = loadSheetsUrl();
 
+  // Google Sheets sync is a developer feature: visible only after opening the app with ?dev=1 (persisted), hidden again with ?dev=0
+  const DEV_KEY = 'tracktime-dev';
+  try {
+    const devParam = new URLSearchParams(location.search).get('dev');
+    if (devParam === '1') localStorage.setItem(DEV_KEY, '1');
+    else if (devParam === '0') localStorage.removeItem(DEV_KEY);
+  } catch (e) { /* storage unavailable */ }
+  const devMode = (() => { try { return localStorage.getItem(DEV_KEY) === '1'; } catch (e) { return false; } })();
+
   function buildSyncPayload() {
     const history = {};
     Object.keys(state.history || {}).forEach((key) => {
@@ -4823,6 +4833,8 @@
   const registerFormError = document.getElementById('registerFormError');
   const logoutBtn = document.getElementById('logoutBtn');
   const profileAccountEmail = document.getElementById('profileAccountEmail');
+  const sheetsSyncBlock = document.getElementById('sheetsSyncBlock');
+  sheetsSyncBlock.hidden = !devMode;
   const sheetsUrlInput = document.getElementById('sheetsUrlInput');
   const sheetsSyncNowBtn = document.getElementById('sheetsSyncNowBtn');
   const sheetsSyncStatus = document.getElementById('sheetsSyncStatus');
