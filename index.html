@@ -1374,6 +1374,279 @@
     line-height: 1.4;
   }
   .training-validation.visible { display: block; }
+  .intake-page {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    overflow: hidden;
+  }
+  .intake-page[hidden] { display: none; }
+  .intake-page.is-entering { animation: intakePageEnter 0.45s cubic-bezier(.34,1.56,.64,1); }
+  .intake-page.is-leaving { animation: intakePageLeave 0.3s ease-in forwards; }
+  @keyframes intakePageEnter {
+    0% { opacity: 0; transform: translateY(24px) scale(0.98); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes intakePageLeave {
+    0% { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(16px) scale(0.98); }
+  }
+  .intake-page-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .intake-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(46px);
+    opacity: 0.35;
+  }
+  .intake-blob-a { width: 260px; height: 260px; top: -60px; left: -60px; background: var(--accent); animation: deco-float-a 9s ease-in-out infinite; }
+  .intake-blob-b { width: 220px; height: 220px; top: 32%; right: -80px; background: var(--gold); animation: deco-float-b 7s ease-in-out infinite; }
+  .intake-blob-c { width: 200px; height: 200px; bottom: -60px; left: 18%; background: var(--cat-dinner); animation: deco-float-a 11s ease-in-out infinite reverse; }
+  .intake-page-scroll {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .intake-page-header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    padding: max(16px, env(safe-area-inset-top, 0px)) 16px 0;
+  }
+  .intake-back {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .intake-back:hover { border-color: var(--accent); color: var(--accent); }
+  .intake-page-content {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 8px 20px 48px;
+  }
+  .intake-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+    margin: 12px 0 28px;
+  }
+  .intake-icon-badge {
+    position: relative;
+    width: 84px;
+    height: 84px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 6px;
+    animation: intakeIconPop 0.6s cubic-bezier(.34,1.56,.64,1);
+  }
+  .intake-icon-emoji {
+    position: relative;
+    z-index: 2;
+    font-size: 38px;
+    display: grid;
+    place-items: center;
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  }
+  .intake-icon-ring {
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    opacity: 0;
+    animation: intakeRingPulse 2.4s ease-out infinite;
+  }
+  .intake-icon-ping {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.35;
+    animation: intakePing 1.8s cubic-bezier(0,0,.2,1) infinite;
+  }
+  @keyframes intakeIconPop {
+    0% { transform: scale(0.4) rotate(-8deg); opacity: 0; }
+    60% { transform: scale(1.08) rotate(3deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0); opacity: 1; }
+  }
+  @keyframes intakeRingPulse {
+    0% { transform: scale(0.9); opacity: 0.6; }
+    100% { transform: scale(1.5); opacity: 0; }
+  }
+  @keyframes intakePing {
+    0% { transform: scale(0.85); opacity: 0.35; }
+    70%, 100% { transform: scale(1.35); opacity: 0; }
+  }
+  .intake-page-title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    animation: intakeFadeUp 0.5s ease-out both;
+    animation-delay: 0.1s;
+  }
+  .intake-page-subtitle {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 13.5px;
+    line-height: 1.5;
+    max-width: 340px;
+    animation: intakeFadeUp 0.5s ease-out both;
+    animation-delay: 0.18s;
+  }
+  @keyframes intakeFadeUp {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  .intake-form { display: grid; gap: 14px; }
+  .intake-form[hidden] { display: none; }
+  .intake-field {
+    display: block;
+    color: var(--ink-soft);
+    font-size: 12px;
+    animation: intakeFadeUp 0.45s ease-out both;
+    animation-delay: calc(0.22s + var(--d, 0) * 0.07s);
+  }
+  .intake-row.intake-field {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+  .intake-form input,
+  .intake-form select,
+  .intake-form textarea {
+    width: 100%;
+    margin-top: 5px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 11px 12px;
+    background: var(--surface);
+    color: var(--ink);
+    font: 13.5px 'Inter', sans-serif;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .intake-form textarea {
+    min-height: 64px;
+    resize: vertical;
+    font-family: inherit;
+  }
+  .intake-form input:focus,
+  .intake-form select:focus,
+  .intake-form textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .intake-validation {
+    display: none;
+    margin: 0;
+    color: var(--warn);
+    font-size: 12px;
+    line-height: 1.4;
+  }
+  .intake-validation.visible { display: block; }
+  .intake-submit {
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    padding: 14px 16px;
+    background: var(--accent);
+    color: var(--surface);
+    font: 600 14.5px 'Inter', sans-serif;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 8px 20px rgba(153, 99, 47, 0.28);
+  }
+  .intake-submit:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(153, 99, 47, 0.34); }
+  .intake-submit:active { transform: translateY(0); }
+  .intake-success {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    padding: 24px 0;
+    animation: intakeFadeUp 0.45s ease-out both;
+  }
+  .intake-success[hidden] { display: none; }
+  .intake-success-badge {
+    position: relative;
+    width: 96px;
+    height: 96px;
+    margin-bottom: 8px;
+  }
+  .intake-success-check { width: 96px; height: 96px; }
+  .intake-success-circle {
+    stroke: var(--accent);
+    stroke-width: 2.5;
+    stroke-dasharray: 151;
+    stroke-dashoffset: 151;
+    animation: intakeCircleDraw 0.5s ease-out forwards;
+  }
+  .intake-success-tick {
+    stroke: var(--accent);
+    stroke-width: 3.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 40;
+    stroke-dashoffset: 40;
+    animation: intakeTickDraw 0.35s ease-out 0.45s forwards;
+  }
+  @keyframes intakeCircleDraw { to { stroke-dashoffset: 0; } }
+  @keyframes intakeTickDraw { to { stroke-dashoffset: 0; } }
+  .intake-success h2 { margin: 4px 0 0; font-size: 22px; }
+  .intake-success p { margin: 0; color: var(--ink-soft); font-size: 13.5px; max-width: 320px; line-height: 1.5; }
+  .intake-success-done {
+    margin-top: 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 11px 20px;
+    background: var(--surface);
+    color: var(--ink);
+    font: 500 13.5px 'Inter', sans-serif;
+    cursor: pointer;
+  }
+  .intake-success-done:hover { border-color: var(--accent); color: var(--accent); }
+  .intake-confetti {
+    position: absolute;
+    inset: -40px;
+    pointer-events: none;
+  }
+  .intake-confetti span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 7px;
+    height: 10px;
+    border-radius: 2px;
+    animation: intakeConfettiPop 0.9s cubic-bezier(.2,.7,.3,1) forwards;
+  }
+  @keyframes intakeConfettiPop {
+    0% { transform: translate(-50%, -50%) rotate(0) scale(0.6); opacity: 1; }
+    100% { transform: translate(var(--tx), var(--ty)) rotate(var(--tr)) scale(1); opacity: 0; }
+  }
   .profile-settings {
     padding: 20px 18px 18px;
     border: 1px solid var(--line);
@@ -2020,6 +2293,12 @@
     .logo-badge.is-bursting .logo-ping, .logo-badge.is-bursting .logo-spark i { animation: none; transition: none; }
     .splash-screen.is-leaving, .splash-screen.is-entering,
     .auth-screen.is-entering, .auth-screen.is-leaving { animation: none; }
+    .intake-page.is-entering, .intake-page.is-leaving,
+    .intake-blob-a, .intake-blob-b, .intake-blob-c,
+    .intake-icon-badge, .intake-icon-ring, .intake-icon-ping,
+    .intake-page-title, .intake-page-subtitle, .intake-field,
+    .intake-success, .intake-success-circle, .intake-success-tick,
+    .intake-confetti span { animation: none; }
   }
 
   /* dashboard view */
@@ -2478,6 +2757,69 @@
       </div>
     </div>
 
+    <div class="intake-page" id="intakePage" hidden>
+      <div class="intake-page-bg" aria-hidden="true">
+        <span class="intake-blob intake-blob-a"></span>
+        <span class="intake-blob intake-blob-b"></span>
+        <span class="intake-blob intake-blob-c"></span>
+      </div>
+      <div class="intake-page-scroll">
+        <header class="intake-page-header">
+          <button class="intake-back" id="intakeBack" type="button" data-i18n-aria="close" aria-label="Закрити">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+        </header>
+        <div class="intake-page-content">
+          <div class="intake-hero">
+            <div class="intake-icon-badge" id="intakeIconBadge">
+              <span class="intake-icon-ping" aria-hidden="true"></span>
+              <span class="intake-icon-ring" aria-hidden="true"></span>
+              <span class="intake-icon-emoji" id="intakeIconEmoji">🏋️</span>
+            </div>
+            <h1 class="intake-page-title" id="intakeTitle" data-i18n="intakeTitle">Дякуємо за покупку!</h1>
+            <p class="intake-page-subtitle" id="intakeSubtitle"></p>
+          </div>
+
+          <form class="intake-form" id="intakeForm">
+            <label class="intake-field" style="--d: 0"><span data-i18n="intakeNameLabel">Ім'я</span><input id="intakeName" type="text" autocomplete="name" required></label>
+            <div class="intake-row intake-field" style="--d: 1">
+              <label><span data-i18n="ageLabel">Вік</span><input id="intakeAge" type="number" min="1" max="120" inputmode="numeric" required></label>
+              <label><span data-i18n="heightLabel">Зріст, см</span><input id="intakeHeight" type="number" min="50" max="250" inputmode="numeric" required></label>
+              <label><span data-i18n="weightLabel">Вага, кг</span><input id="intakeWeight" type="number" min="20" max="400" step="0.1" inputmode="decimal" required></label>
+            </div>
+            <label class="intake-field" style="--d: 2"><span data-i18n="intakeGoalLabel">Ціль</span>
+              <select id="intakeGoal">
+                <option value="lose" data-i18n="intakeGoalLose">Схуднення</option>
+                <option value="maintain" data-i18n="intakeGoalMaintain">Підтримка форми</option>
+                <option value="gain" data-i18n="intakeGoalGain">Набір маси</option>
+              </select>
+            </label>
+            <label class="intake-field" style="--d: 3"><span data-i18n="intakeHealthLabel">Проблеми зі здоров'ям, травми, протипоказання</span>
+              <textarea id="intakeHealth" data-i18n-placeholder="intakeHealthPlaceholder" placeholder="Наприклад: біль у спині, астма — або напиши «немає»"></textarea>
+            </label>
+            <label class="intake-field" style="--d: 4"><span data-i18n="intakeNotesLabel">Додаткові побажання (необов'язково)</span>
+              <textarea id="intakeNotes" data-i18n-placeholder="intakeNotesPlaceholder" placeholder="Алергії, харчові звички, зручний розклад тренувань..."></textarea>
+            </label>
+            <p class="intake-validation" id="intakeValidation" role="alert"></p>
+            <button class="intake-submit intake-field" style="--d: 5" type="submit" data-i18n="intakeSubmit">Надіслати анкету</button>
+          </form>
+
+          <div class="intake-success" id="intakeSuccess" hidden>
+            <div class="intake-success-badge">
+              <svg class="intake-success-check" viewBox="0 0 52 52">
+                <circle class="intake-success-circle" cx="26" cy="26" r="24" fill="none"/>
+                <path class="intake-success-tick" fill="none" d="M14 27l7 7 17-17"/>
+              </svg>
+              <div class="intake-confetti" id="intakeConfetti" aria-hidden="true"></div>
+            </div>
+            <h2 data-i18n="intakeSuccessTitle">Готово!</h2>
+            <p id="intakeSuccessText"></p>
+            <button class="intake-success-done" id="intakeSuccessDone" type="button" data-i18n="intakeBackToPrograms">До програм</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <section class="view" id="view-profile">
       <section class="profile-settings" aria-label="Профіль">
         <div class="profile-account">
@@ -2707,7 +3049,7 @@
   const STORAGE_KEY = 'calorie-tracker-v2';
   const translations = {
     uk: {
-      languageLabel: 'Мова', openSelect: 'Відкрити список', photoLabel: 'Додати фото', avatarLabel: 'Додати фото аватара', profile: 'Профіль', profileCaption: 'Твої особисті дані та показники', darkTheme: 'Темна тема', nameLabel: 'Ім’я', namePlaceholder: 'Наприклад, Олена', ageLabel: 'Вік', agePlaceholder: 'Років', heightLabel: 'Зріст, см', heightPlaceholder: 'Наприклад, 170', weightLabel: 'Вага, кг', weightPlaceholder: 'Наприклад, 70', bmiLabel: 'ІМТ', bmiCategoryLabel: 'Категорія ваги', bmiAdviceLabel: 'Орієнтовна оцінка за ІМТ', bmiUnderweight: 'Недостатня вага', bmiNormal: 'Норма', bmiOverweight: 'Надлишкова вага', bmiObesity1: 'Ожиріння I ст.', bmiObesity2: 'Ожиріння II ст.', bmiObesity3: 'Ожиріння III ст.', bmiNoData: 'Вкажи зріст і вагу', saveProfile: 'Зберегти профіль', profileSaved: 'Профіль збережено', editField: 'Редагувати', sheetsSyncTitle: 'Синхронізація з Google Таблицею', sheetsSyncCaption: 'Вкажи URL розгорнутого Apps Script, щоб зберігати копію даних (харчування, тренування, профіль) у Google Таблиці. Фото не синхронізуються.', sheetsUrlPlaceholder: 'https://script.google.com/macros/s/.../exec', syncNow: 'Синхронізувати', syncStatusIdle: 'Ще не синхронізовано', syncStatusSyncing: 'Синхронізація…', syncStatusSuccess: 'Синхронізовано', syncStatusError: 'Помилка синхронізації — перевір URL', syncStatusNoUrl: 'Спочатку вкажи URL', periodFilter: 'Період', categoryFilter: 'Категорія', periodToday: 'Сьогодні', periodWeek: 'Останні 7 днів', allCategories: 'Усі категорії', dashboard: 'Дашборд', dashboardToday: 'Дані за сьогодні', dashboardWeek: 'Дані за останні 7 днів', nutritionChart: 'Калорії за період', unit: 'ккал', currentUser: 'Ти', olena: 'Олена', andrii: 'Андрій', sofia: 'Софія', nutrition: 'Харчування', last7Nutrition: 'за останні 7 днів', weeklyKcal: 'всього ккал', mealCount: 'прийомів їжі', favoriteMeal: 'найчастіше', categoryBreakdown: 'Розподіл за категоріями', noCategoryData: 'Немає даних за цей період', factsTitle: '10 фактів про харчування', faqTitle: 'Часті запитання', faqQ1: 'Де зберігаються мої дані?', faqA1: 'Усі записи харчування, тренувань і профіль зберігаються локально в браузері й прив’язані до твого акаунта — без зовнішніх серверів.', faqQ2: 'Чи синхронізуються дані між пристроями?', faqA2: "Ні, акаунти та дані прив'язані до цього браузера на цьому пристрої. Якщо очистити кеш або відкрити застосунок на іншому пристрої, доведеться зареєструватися знову і історія буде порожньою.", faqQ3: 'Як змінити денну ціль калорій?', faqA3: 'На вкладці «Харчування» натисни на значення цілі поруч із написом «ціль» і введи нове число — воно збережеться автоматично.', faqQ4: 'Як рахується ІМТ?', faqA4: 'Індекс маси тіла — це вага в кілограмах, поділена на зріст у метрах у квадраті. Вкажи зріст і вагу в профілі, щоб побачити результат.', faqQ5: 'Чи можна додати фото до страви або аватара?', faqA5: 'Так, натисни на іконку камери біля форми додавання їжі або на аватар у профілі, щоб завантажити фото з пристрою.', faqQ6: 'Як перемкнути мову чи темну тему?', faqA6: 'І мова, і темна тема перемикаються прямо в шапці застосунку — прапорцем і кнопкою з місяцем/сонцем поруч із ним.', training: 'Тренування', trainingCaption: 'Плануй активність на тиждень', trainingType: 'Тип тренування', unitLabel: 'Одиниця', quantity: 'Кількість', daysLabel: 'Дні', exercisesPlaceholder: 'Вправи: присідання, планка, віджимання...', notesPlaceholder: "Нотатка (необов'язково)", addTraining: 'Додати тренування', strength: 'Силове', cardio: 'Кардіо', yoga: 'Йога', stretching: 'Розтяжка', minutes: 'хв', sets: 'підх.', sessions: 'разів', mon: 'Пн', tue: 'Вт', wed: 'Ср', thu: 'Чт', fri: 'Пт', sat: 'Сб', sun: 'Нд', noTraining: 'Ще немає запланованих тренувань', exercisesLabel: 'Вправи', noteLabel: 'Нотатка', deleteTraining: 'Видалити тренування', confirmTitle: 'Змінити тип тренування?', confirmIncomplete: 'Поточне тренування ще не заповнене. Перейти до іншого типу?', confirmComplete: 'Поточне тренування заповнене. Додайте його перед переходом або продовжуйте без збереження.', confirmStay: 'Залишитися', confirmContinue: 'Так, продовжити', validation: 'Заповніть тип, виберіть хоча б один день, вкажіть кількість і додайте вправи.', noData: '—', appName: 'TrackTime', pageTitle: 'TrackTime — облік калорій', tagline: 'Контролюй своє життя', today: 'Сьогодні', week: 'Тиждень', goal: 'ціль', chatOpen: 'Чат з підтримкою', chatTitle: 'Підтримка', chatStatus: 'Зазвичай відповідаємо швидко', chatPlaceholder: 'Напиши повідомлення...', chatSend: 'Надіслати', chatWelcome: 'Доброго дня! 👋 Менеджер підтримки скоро приєднається до чату.', programsNav: 'Програми', programsTitle: 'Програми тренувань від фахівців', programsCaption: 'Кожну програму індивідуально розписує сертифікований спеціаліст під твій рівень і ціль', programStrengthName: 'Силове тренування', programStrengthDesc: 'Персональний план силових тренувань з прогресією навантаження, розписаний тренером під твої цілі та обладнання.', programCardioName: 'Кардіо', programCardioDesc: 'Програма для витривалості та схуднення, яку спеціаліст адаптує під твій поточний рівень підготовки.', programYogaName: 'Йога', programYogaDesc: 'Індивідуальна послідовність асан і дихальних практик від інструктора з урахуванням твого рівня гнучкості.', programStretchingName: 'Розтяжка', programStretchingDesc: 'План розвитку гнучкості та мобільності суглобів, складений спеціалістом персонально для тебе.', programDiscount: '−30% для нових користувачів', programBuy: 'Купити програму', programBuyToast: 'Це демо-версія 🙂 Оплата поки не підключена — скоро можна буде купити програму тут.', nutritionPlansTitle: 'Плани харчування від дієтологів', nutritionPlansCaption: 'Кожен раціон індивідуально розписує дієтолог під твою ціль, вагу та спосіб життя', planMassName: 'Набір маси', planMassDesc: 'Раціон з профіцитом калорій і балансом БЖВ, складений дієтологом для якісного набору ваги без зайвого жиру.', planLossName: 'Схуднення', planLossDesc: 'Персональний план харчування з дефіцитом калорій, який враховує твої смаки, звички та спосіб життя.', planFatlossName: 'Скидання жиру', planFatlossDesc: "Раціон для зниження відсотка жиру зі збереженням м'язової маси, розписаний фахівцем з харчування.", planMuscleName: "Набір м'язів", planMuscleDesc: 'Високобілковий раціон для росту м\'язів, складений персонально під твої тренування та ціль.',
+      languageLabel: 'Мова', openSelect: 'Відкрити список', photoLabel: 'Додати фото', avatarLabel: 'Додати фото аватара', profile: 'Профіль', profileCaption: 'Твої особисті дані та показники', darkTheme: 'Темна тема', nameLabel: 'Ім’я', namePlaceholder: 'Наприклад, Олена', ageLabel: 'Вік', agePlaceholder: 'Років', heightLabel: 'Зріст, см', heightPlaceholder: 'Наприклад, 170', weightLabel: 'Вага, кг', weightPlaceholder: 'Наприклад, 70', bmiLabel: 'ІМТ', bmiCategoryLabel: 'Категорія ваги', bmiAdviceLabel: 'Орієнтовна оцінка за ІМТ', bmiUnderweight: 'Недостатня вага', bmiNormal: 'Норма', bmiOverweight: 'Надлишкова вага', bmiObesity1: 'Ожиріння I ст.', bmiObesity2: 'Ожиріння II ст.', bmiObesity3: 'Ожиріння III ст.', bmiNoData: 'Вкажи зріст і вагу', saveProfile: 'Зберегти профіль', profileSaved: 'Профіль збережено', editField: 'Редагувати', sheetsSyncTitle: 'Синхронізація з Google Таблицею', sheetsSyncCaption: 'Вкажи URL розгорнутого Apps Script, щоб зберігати копію даних (харчування, тренування, профіль) у Google Таблиці. Фото не синхронізуються.', sheetsUrlPlaceholder: 'https://script.google.com/macros/s/.../exec', syncNow: 'Синхронізувати', syncStatusIdle: 'Ще не синхронізовано', syncStatusSyncing: 'Синхронізація…', syncStatusSuccess: 'Синхронізовано', syncStatusError: 'Помилка синхронізації — перевір URL', syncStatusNoUrl: 'Спочатку вкажи URL', periodFilter: 'Період', categoryFilter: 'Категорія', periodToday: 'Сьогодні', periodWeek: 'Останні 7 днів', allCategories: 'Усі категорії', dashboard: 'Дашборд', dashboardToday: 'Дані за сьогодні', dashboardWeek: 'Дані за останні 7 днів', nutritionChart: 'Калорії за період', unit: 'ккал', currentUser: 'Ти', olena: 'Олена', andrii: 'Андрій', sofia: 'Софія', nutrition: 'Харчування', last7Nutrition: 'за останні 7 днів', weeklyKcal: 'всього ккал', mealCount: 'прийомів їжі', favoriteMeal: 'найчастіше', categoryBreakdown: 'Розподіл за категоріями', noCategoryData: 'Немає даних за цей період', factsTitle: '10 фактів про харчування', faqTitle: 'Часті запитання', faqQ1: 'Де зберігаються мої дані?', faqA1: 'Усі записи харчування, тренувань і профіль зберігаються локально в браузері й прив’язані до твого акаунта — без зовнішніх серверів.', faqQ2: 'Чи синхронізуються дані між пристроями?', faqA2: "Ні, акаунти та дані прив'язані до цього браузера на цьому пристрої. Якщо очистити кеш або відкрити застосунок на іншому пристрої, доведеться зареєструватися знову і історія буде порожньою.", faqQ3: 'Як змінити денну ціль калорій?', faqA3: 'На вкладці «Харчування» натисни на значення цілі поруч із написом «ціль» і введи нове число — воно збережеться автоматично.', faqQ4: 'Як рахується ІМТ?', faqA4: 'Індекс маси тіла — це вага в кілограмах, поділена на зріст у метрах у квадраті. Вкажи зріст і вагу в профілі, щоб побачити результат.', faqQ5: 'Чи можна додати фото до страви або аватара?', faqA5: 'Так, натисни на іконку камери біля форми додавання їжі або на аватар у профілі, щоб завантажити фото з пристрою.', faqQ6: 'Як перемкнути мову чи темну тему?', faqA6: 'І мова, і темна тема перемикаються прямо в шапці застосунку — прапорцем і кнопкою з місяцем/сонцем поруч із ним.', training: 'Тренування', trainingCaption: 'Плануй активність на тиждень', trainingType: 'Тип тренування', unitLabel: 'Одиниця', quantity: 'Кількість', daysLabel: 'Дні', exercisesPlaceholder: 'Вправи: присідання, планка, віджимання...', notesPlaceholder: "Нотатка (необов'язково)", addTraining: 'Додати тренування', strength: 'Силове', cardio: 'Кардіо', yoga: 'Йога', stretching: 'Розтяжка', minutes: 'хв', sets: 'підх.', sessions: 'разів', mon: 'Пн', tue: 'Вт', wed: 'Ср', thu: 'Чт', fri: 'Пт', sat: 'Сб', sun: 'Нд', noTraining: 'Ще немає запланованих тренувань', exercisesLabel: 'Вправи', noteLabel: 'Нотатка', deleteTraining: 'Видалити тренування', confirmTitle: 'Змінити тип тренування?', confirmIncomplete: 'Поточне тренування ще не заповнене. Перейти до іншого типу?', confirmComplete: 'Поточне тренування заповнене. Додайте його перед переходом або продовжуйте без збереження.', confirmStay: 'Залишитися', confirmContinue: 'Так, продовжити', validation: 'Заповніть тип, виберіть хоча б один день, вкажіть кількість і додайте вправи.', noData: '—', appName: 'TrackTime', pageTitle: 'TrackTime — облік калорій', tagline: 'Контролюй своє життя', today: 'Сьогодні', week: 'Тиждень', goal: 'ціль', chatOpen: 'Чат з підтримкою', chatTitle: 'Підтримка', chatStatus: 'Зазвичай відповідаємо швидко', chatPlaceholder: 'Напиши повідомлення...', chatSend: 'Надіслати', chatWelcome: 'Доброго дня! 👋 Менеджер підтримки скоро приєднається до чату.', programsNav: 'Програми', programsTitle: 'Програми тренувань від фахівців', programsCaption: 'Кожну програму індивідуально розписує сертифікований спеціаліст під твій рівень і ціль', programStrengthName: 'Силове тренування', programStrengthDesc: 'Персональний план силових тренувань з прогресією навантаження, розписаний тренером під твої цілі та обладнання.', programCardioName: 'Кардіо', programCardioDesc: 'Програма для витривалості та схуднення, яку спеціаліст адаптує під твій поточний рівень підготовки.', programYogaName: 'Йога', programYogaDesc: 'Індивідуальна послідовність асан і дихальних практик від інструктора з урахуванням твого рівня гнучкості.', programStretchingName: 'Розтяжка', programStretchingDesc: 'План розвитку гнучкості та мобільності суглобів, складений спеціалістом персонально для тебе.', programDiscount: '−30% для нових користувачів', programBuy: 'Купити програму', programBuyToast: 'Це демо-версія 🙂 Оплата поки не підключена — скоро можна буде купити програму тут.', nutritionPlansTitle: 'Плани харчування від дієтологів', nutritionPlansCaption: 'Кожен раціон індивідуально розписує дієтолог під твою ціль, вагу та спосіб життя', planMassName: 'Набір маси', planMassDesc: 'Раціон з профіцитом калорій і балансом БЖВ, складений дієтологом для якісного набору ваги без зайвого жиру.', planLossName: 'Схуднення', planLossDesc: 'Персональний план харчування з дефіцитом калорій, який враховує твої смаки, звички та спосіб життя.', planFatlossName: 'Скидання жиру', planFatlossDesc: "Раціон для зниження відсотка жиру зі збереженням м'язової маси, розписаний фахівцем з харчування.", planMuscleName: "Набір м'язів", planMuscleDesc: 'Високобілковий раціон для росту м\'язів, складений персонально під твої тренування та ціль.', intakeTitle: 'Дякуємо за покупку!', intakeSubtitle: 'Заповни коротку анкету для «{program}» — фахівець складе план саме під тебе.', intakeNameLabel: "Ім'я", intakeGoalLabel: 'Ціль', intakeGoalLose: 'Схуднення', intakeGoalMaintain: 'Підтримка форми', intakeGoalGain: 'Набір маси', intakeHealthLabel: "Проблеми зі здоров'ям, травми, протипоказання", intakeHealthPlaceholder: 'Наприклад: біль у спині, астма — або напиши «немає»', intakeNotesLabel: 'Додаткові побажання (необов’язково)', intakeNotesPlaceholder: 'Алергії, харчові звички, зручний розклад тренувань...', intakeSubmit: 'Надіслати анкету', intakeSuccessToast: 'Дякуємо! Анкету надіслано — фахівець зв’яжеться з тобою найближчим часом', intakeRequired: 'Заповни ім’я, вік, зріст і вагу', intakeSuccessTitle: 'Готово!', intakeBackToPrograms: 'До програм',
       foodPlaceholder: "Що з'їли?", chooseDish: 'Оберіть...', categoryLabel: 'Категорія прийому їжі', breakfast: 'Сніданок',
       lunch: 'Обід', dinner: 'Вечеря', snack: 'Перекус', record: 'Записати', todayEntries: 'Сьогоднішні записи',
       resetToday: 'Скинути сьогоднішній день', leaderboard: 'Лідерборд', thisWeek: 'цього тижня',
@@ -2719,7 +3061,7 @@
       loginTab: 'Вхід', registerTab: 'Реєстрація', emailLabel: 'Email', emailPlaceholder: 'you@example.com', passwordLabel: 'Пароль', confirmPasswordLabel: 'Підтвердження пароля', loginSubmit: 'Увійти', registerSubmit: 'Зареєструватися', logoutBtn: 'Вийти', loggedOut: 'Ти вийшов з акаунта', registerSuccess: 'Акаунт створено', nameRequiredError: "Вкажи ім'я (мінімум 2 символи)", emailRequiredError: 'Вкажи email', emailInvalidError: 'Введи коректний email', emailTakenError: 'Акаунт з таким email вже існує', passwordRequiredError: 'Вкажи пароль', passwordShortError: 'Пароль має містити щонайменше 6 символів', confirmRequiredError: 'Підтверди пароль', confirmMismatchError: 'Паролі не збігаються', loginInvalidError: 'Невірний email або пароль', splashStart: 'TrackTime — почати', splashBack: 'TrackTime — подвійний клік, щоб повернутися на початок'
     },
     en: {
-      languageLabel: 'Language', openSelect: 'Open list', photoLabel: 'Add photo', avatarLabel: 'Add avatar photo', profile: 'Profile', profileCaption: 'Your personal details and metrics', darkTheme: 'Dark theme', nameLabel: 'Name', namePlaceholder: 'For example, Olena', ageLabel: 'Age', agePlaceholder: 'Years', heightLabel: 'Height, cm', heightPlaceholder: 'For example, 170', weightLabel: 'Weight, kg', weightPlaceholder: 'For example, 70', bmiLabel: 'BMI', bmiCategoryLabel: 'Weight category', bmiAdviceLabel: 'Estimated BMI assessment', bmiUnderweight: 'Underweight', bmiNormal: 'Normal range', bmiOverweight: 'Overweight', bmiObesity1: 'Obesity class I', bmiObesity2: 'Obesity class II', bmiObesity3: 'Obesity class III', bmiNoData: 'Enter height and weight', saveProfile: 'Save profile', profileSaved: 'Profile saved', editField: 'Edit', sheetsSyncTitle: 'Google Sheets sync', sheetsSyncCaption: 'Enter your deployed Apps Script URL to keep a copy of your data (nutrition, workouts, profile) in a Google Sheet. Photos are not synced.', sheetsUrlPlaceholder: 'https://script.google.com/macros/s/.../exec', syncNow: 'Sync now', syncStatusIdle: 'Not synced yet', syncStatusSyncing: 'Syncing…', syncStatusSuccess: 'Synced', syncStatusError: 'Sync failed — check the URL', syncStatusNoUrl: 'Enter a URL first', periodFilter: 'Period', categoryFilter: 'Category', periodToday: 'Today', periodWeek: 'Last 7 days', allCategories: 'All categories', dashboard: 'Dashboard', dashboardToday: 'Data for today', dashboardWeek: 'Data for the last 7 days', nutritionChart: 'Calories for the period', unit: 'kcal', currentUser: 'You', olena: 'Olena', andrii: 'Andrii', sofia: 'Sofia', nutrition: 'Nutrition', last7Nutrition: 'over the last 7 days', weeklyKcal: 'total kcal', mealCount: 'meals logged', favoriteMeal: 'most frequent', categoryBreakdown: 'Breakdown by category', noCategoryData: 'No data for this period', factsTitle: '10 food facts', faqTitle: 'Frequently asked questions', faqQ1: 'Where is my data stored?', faqA1: 'All your food entries, workouts, and profile are stored locally in your browser and tied to your account — no external servers involved.', faqQ2: 'Does data sync between devices?', faqA2: "No, accounts and data are tied to this browser on this device. Clearing your cache or opening the app on another device means signing up again with an empty history.", faqQ3: 'How do I change my daily calorie goal?', faqA3: 'On the Nutrition tab, tap the goal value next to the "goal" label and enter a new number — it saves automatically.', faqQ4: 'How is BMI calculated?', faqA4: 'Body mass index is your weight in kilograms divided by your height in meters squared. Enter your height and weight in your profile to see the result.', faqQ5: 'Can I add a photo to a meal or my avatar?', faqA5: 'Yes, tap the camera icon next to the food entry form or your avatar in the profile to upload a photo from your device.', faqQ6: 'How do I switch the language or dark theme?', faqA6: 'Both the language and dark theme switch right in the header — the flag selector and the sun/moon button next to it.', training: 'Workouts', trainingCaption: 'Plan your weekly activity', trainingType: 'Workout type', unitLabel: 'Unit', quantity: 'Quantity', daysLabel: 'Days', exercisesPlaceholder: 'Exercises: squats, plank, push-ups...', notesPlaceholder: 'Note (optional)', addTraining: 'Add workout', strength: 'Strength', cardio: 'Cardio', yoga: 'Yoga', stretching: 'Stretching', minutes: 'min', sets: 'sets', sessions: 'times', mon: 'Mon', tue: 'Tue', wed: 'Wed', thu: 'Thu', fri: 'Fri', sat: 'Sat', sun: 'Sun', noTraining: 'No workouts planned yet', exercisesLabel: 'Exercises', noteLabel: 'Note', deleteTraining: 'Delete workout', confirmTitle: 'Change workout type?', confirmIncomplete: 'The current workout is incomplete. Switch to another type?', confirmComplete: 'The current workout is complete. Add it before switching or continue without saving.', confirmStay: 'Stay here', confirmContinue: 'Yes, continue', validation: 'Choose a day, enter a quantity, and add exercises before saving.', noData: '—', appName: 'TrackTime', pageTitle: 'TrackTime — calorie tracking', tagline: 'Take control of your life', today: 'Today', week: 'Week', goal: 'goal', chatOpen: 'Chat with support', chatTitle: 'Support', chatStatus: 'We usually reply quickly', chatPlaceholder: 'Type a message...', chatSend: 'Send', chatWelcome: "Hi there! 👋 A support manager will join the chat shortly.", programsNav: 'Programs', programsTitle: 'Training programs by specialists', programsCaption: 'Each program is individually written by a certified specialist for your level and goal', programStrengthName: 'Strength training', programStrengthDesc: 'A personal strength program with progressive overload, built by a coach around your goals and equipment.', programCardioName: 'Cardio', programCardioDesc: 'An endurance and weight-loss program that a specialist adapts to your current fitness level.', programYogaName: 'Yoga', programYogaDesc: 'An individual sequence of poses and breathing practices from an instructor, matched to your flexibility level.', programStretchingName: 'Stretching', programStretchingDesc: 'A mobility and flexibility plan built personally for you by a specialist.', programDiscount: '−30% for new users', programBuy: 'Buy program', programBuyToast: "This is a demo 🙂 Payments aren't connected yet — you'll be able to buy the program here soon.", nutritionPlansTitle: 'Nutrition plans by dietitians', nutritionPlansCaption: 'Each meal plan is individually written by a dietitian for your goal, weight, and lifestyle', planMassName: 'Mass gain', planMassDesc: 'A calorie-surplus diet with a balanced macro split, built by a dietitian for clean weight gain without excess fat.', planLossName: 'Weight loss', planLossDesc: 'A personal calorie-deficit meal plan that takes your taste, habits, and lifestyle into account.', planFatlossName: 'Fat loss', planFatlossDesc: 'A diet for lowering body fat percentage while preserving muscle mass, written by a nutrition specialist.', planMuscleName: 'Muscle gain', planMuscleDesc: 'A high-protein diet for muscle growth, built personally around your training and goal.',
+      languageLabel: 'Language', openSelect: 'Open list', photoLabel: 'Add photo', avatarLabel: 'Add avatar photo', profile: 'Profile', profileCaption: 'Your personal details and metrics', darkTheme: 'Dark theme', nameLabel: 'Name', namePlaceholder: 'For example, Olena', ageLabel: 'Age', agePlaceholder: 'Years', heightLabel: 'Height, cm', heightPlaceholder: 'For example, 170', weightLabel: 'Weight, kg', weightPlaceholder: 'For example, 70', bmiLabel: 'BMI', bmiCategoryLabel: 'Weight category', bmiAdviceLabel: 'Estimated BMI assessment', bmiUnderweight: 'Underweight', bmiNormal: 'Normal range', bmiOverweight: 'Overweight', bmiObesity1: 'Obesity class I', bmiObesity2: 'Obesity class II', bmiObesity3: 'Obesity class III', bmiNoData: 'Enter height and weight', saveProfile: 'Save profile', profileSaved: 'Profile saved', editField: 'Edit', sheetsSyncTitle: 'Google Sheets sync', sheetsSyncCaption: 'Enter your deployed Apps Script URL to keep a copy of your data (nutrition, workouts, profile) in a Google Sheet. Photos are not synced.', sheetsUrlPlaceholder: 'https://script.google.com/macros/s/.../exec', syncNow: 'Sync now', syncStatusIdle: 'Not synced yet', syncStatusSyncing: 'Syncing…', syncStatusSuccess: 'Synced', syncStatusError: 'Sync failed — check the URL', syncStatusNoUrl: 'Enter a URL first', periodFilter: 'Period', categoryFilter: 'Category', periodToday: 'Today', periodWeek: 'Last 7 days', allCategories: 'All categories', dashboard: 'Dashboard', dashboardToday: 'Data for today', dashboardWeek: 'Data for the last 7 days', nutritionChart: 'Calories for the period', unit: 'kcal', currentUser: 'You', olena: 'Olena', andrii: 'Andrii', sofia: 'Sofia', nutrition: 'Nutrition', last7Nutrition: 'over the last 7 days', weeklyKcal: 'total kcal', mealCount: 'meals logged', favoriteMeal: 'most frequent', categoryBreakdown: 'Breakdown by category', noCategoryData: 'No data for this period', factsTitle: '10 food facts', faqTitle: 'Frequently asked questions', faqQ1: 'Where is my data stored?', faqA1: 'All your food entries, workouts, and profile are stored locally in your browser and tied to your account — no external servers involved.', faqQ2: 'Does data sync between devices?', faqA2: "No, accounts and data are tied to this browser on this device. Clearing your cache or opening the app on another device means signing up again with an empty history.", faqQ3: 'How do I change my daily calorie goal?', faqA3: 'On the Nutrition tab, tap the goal value next to the "goal" label and enter a new number — it saves automatically.', faqQ4: 'How is BMI calculated?', faqA4: 'Body mass index is your weight in kilograms divided by your height in meters squared. Enter your height and weight in your profile to see the result.', faqQ5: 'Can I add a photo to a meal or my avatar?', faqA5: 'Yes, tap the camera icon next to the food entry form or your avatar in the profile to upload a photo from your device.', faqQ6: 'How do I switch the language or dark theme?', faqA6: 'Both the language and dark theme switch right in the header — the flag selector and the sun/moon button next to it.', training: 'Workouts', trainingCaption: 'Plan your weekly activity', trainingType: 'Workout type', unitLabel: 'Unit', quantity: 'Quantity', daysLabel: 'Days', exercisesPlaceholder: 'Exercises: squats, plank, push-ups...', notesPlaceholder: 'Note (optional)', addTraining: 'Add workout', strength: 'Strength', cardio: 'Cardio', yoga: 'Yoga', stretching: 'Stretching', minutes: 'min', sets: 'sets', sessions: 'times', mon: 'Mon', tue: 'Tue', wed: 'Wed', thu: 'Thu', fri: 'Fri', sat: 'Sat', sun: 'Sun', noTraining: 'No workouts planned yet', exercisesLabel: 'Exercises', noteLabel: 'Note', deleteTraining: 'Delete workout', confirmTitle: 'Change workout type?', confirmIncomplete: 'The current workout is incomplete. Switch to another type?', confirmComplete: 'The current workout is complete. Add it before switching or continue without saving.', confirmStay: 'Stay here', confirmContinue: 'Yes, continue', validation: 'Choose a day, enter a quantity, and add exercises before saving.', noData: '—', appName: 'TrackTime', pageTitle: 'TrackTime — calorie tracking', tagline: 'Take control of your life', today: 'Today', week: 'Week', goal: 'goal', chatOpen: 'Chat with support', chatTitle: 'Support', chatStatus: 'We usually reply quickly', chatPlaceholder: 'Type a message...', chatSend: 'Send', chatWelcome: "Hi there! 👋 A support manager will join the chat shortly.", programsNav: 'Programs', programsTitle: 'Training programs by specialists', programsCaption: 'Each program is individually written by a certified specialist for your level and goal', programStrengthName: 'Strength training', programStrengthDesc: 'A personal strength program with progressive overload, built by a coach around your goals and equipment.', programCardioName: 'Cardio', programCardioDesc: 'An endurance and weight-loss program that a specialist adapts to your current fitness level.', programYogaName: 'Yoga', programYogaDesc: 'An individual sequence of poses and breathing practices from an instructor, matched to your flexibility level.', programStretchingName: 'Stretching', programStretchingDesc: 'A mobility and flexibility plan built personally for you by a specialist.', programDiscount: '−30% for new users', programBuy: 'Buy program', programBuyToast: "This is a demo 🙂 Payments aren't connected yet — you'll be able to buy the program here soon.", nutritionPlansTitle: 'Nutrition plans by dietitians', nutritionPlansCaption: 'Each meal plan is individually written by a dietitian for your goal, weight, and lifestyle', planMassName: 'Mass gain', planMassDesc: 'A calorie-surplus diet with a balanced macro split, built by a dietitian for clean weight gain without excess fat.', planLossName: 'Weight loss', planLossDesc: 'A personal calorie-deficit meal plan that takes your taste, habits, and lifestyle into account.', planFatlossName: 'Fat loss', planFatlossDesc: 'A diet for lowering body fat percentage while preserving muscle mass, written by a nutrition specialist.', planMuscleName: 'Muscle gain', planMuscleDesc: 'A high-protein diet for muscle growth, built personally around your training and goal.', intakeTitle: 'Thanks for your purchase!', intakeSubtitle: 'Fill in a short form for "{program}" — a specialist will build your plan around it.', intakeNameLabel: 'Name', intakeGoalLabel: 'Goal', intakeGoalLose: 'Weight loss', intakeGoalMaintain: 'Staying in shape', intakeGoalGain: 'Mass gain', intakeHealthLabel: 'Health issues, injuries, contraindications', intakeHealthPlaceholder: "E.g. back pain, asthma — or write \"none\"", intakeNotesLabel: 'Additional notes (optional)', intakeNotesPlaceholder: 'Allergies, eating habits, a convenient training schedule...', intakeSubmit: 'Submit form', intakeSuccessToast: 'Thanks! Your form has been sent — a specialist will contact you shortly', intakeRequired: 'Fill in your name, age, height, and weight', intakeSuccessTitle: 'All set!', intakeBackToPrograms: 'Back to programs',
       foodPlaceholder: 'What did you eat?', chooseDish: 'Choose...', categoryLabel: 'Meal category', breakfast: 'Breakfast',
       lunch: 'Lunch', dinner: 'Dinner', snack: 'Snack', record: 'Log food', todayEntries: "Today's entries",
       resetToday: 'Reset today', leaderboard: 'Leaderboard', thisWeek: 'this week', average: 'daily average, kcal',
@@ -2740,7 +3082,7 @@
   }
 
   function defaultState() {
-    return { goal: 2000, history: {}, language: 'uk', training: [], profile: {}, theme: 'light', chat: [] };
+    return { goal: 2000, history: {}, language: 'uk', training: [], profile: {}, theme: 'light', chat: [], intakeRequests: [] };
   }
 
   function stateKeyFor(email) {
@@ -2759,7 +3101,8 @@
           training: Array.isArray(parsed.training) ? parsed.training : [],
           profile: parsed.profile && typeof parsed.profile === 'object' ? parsed.profile : {},
           theme: parsed.theme === 'dark' ? 'dark' : 'light',
-          chat: Array.isArray(parsed.chat) ? parsed.chat : []
+          chat: Array.isArray(parsed.chat) ? parsed.chat : [],
+          intakeRequests: Array.isArray(parsed.intakeRequests) ? parsed.intakeRequests : []
         };
       }
     } catch (e) {
@@ -3050,6 +3393,24 @@
   const trainingConfirmStay = document.getElementById('trainingConfirmStay');
   const trainingConfirmContinue = document.getElementById('trainingConfirmContinue');
   const trainingValidation = document.getElementById('trainingValidation');
+  const intakePage = document.getElementById('intakePage');
+  const intakeBack = document.getElementById('intakeBack');
+  const intakeIconBadge = document.getElementById('intakeIconBadge');
+  const intakeIconEmoji = document.getElementById('intakeIconEmoji');
+  const intakeSubtitle = document.getElementById('intakeSubtitle');
+  const intakeForm = document.getElementById('intakeForm');
+  const intakeName = document.getElementById('intakeName');
+  const intakeAge = document.getElementById('intakeAge');
+  const intakeHeight = document.getElementById('intakeHeight');
+  const intakeWeight = document.getElementById('intakeWeight');
+  const intakeGoal = document.getElementById('intakeGoal');
+  const intakeHealth = document.getElementById('intakeHealth');
+  const intakeNotes = document.getElementById('intakeNotes');
+  const intakeValidation = document.getElementById('intakeValidation');
+  const intakeSuccess = document.getElementById('intakeSuccess');
+  const intakeSuccessText = document.getElementById('intakeSuccessText');
+  const intakeSuccessDone = document.getElementById('intakeSuccessDone');
+  const intakeConfetti = document.getElementById('intakeConfetti');
   const profileForm = document.getElementById('profileForm');
   const profileSaveBtn = document.getElementById('profileSaveBtn');
   const profileAvatarInput = document.getElementById('profileAvatarInput');
@@ -3569,6 +3930,7 @@
     if (event.key !== 'Escape') return;
     if (!profileModal.hidden) closeProfile();
     if (!chatPanel.hidden) closeChat();
+    if (!intakePage.hidden) closeIntakePage();
   });
 
   function formatChatTime(iso) {
@@ -3630,8 +3992,110 @@
     chatInput.value = '';
   });
 
+  const PROGRAM_NAME_KEY = {
+    strength: 'programStrengthName', cardio: 'programCardioName', yoga: 'programYogaName', stretching: 'programStretchingName',
+    mass: 'planMassName', loss: 'planLossName', fatloss: 'planFatlossName', muscle: 'planMuscleName'
+  };
+  const PROGRAM_EMOJI = {
+    strength: '🏋️', cardio: '🏃', yoga: '🧘', stretching: '🤸',
+    mass: '🍗', loss: '⚖️', fatloss: '🔥', muscle: '💪'
+  };
+  const CONFETTI_COLORS = ['#99632F', '#D6996B', '#B47D38', '#4F78A8', '#6C8F72', '#C24B3F'];
+  let pendingProgramType = '';
+
+  function launchConfetti() {
+    intakeConfetti.innerHTML = '';
+    for (let i = 0; i < 26; i++) {
+      const piece = document.createElement('span');
+      const angle = Math.random() * Math.PI * 2;
+      const distance = 55 + Math.random() * 70;
+      piece.style.setProperty('--tx', Math.cos(angle) * distance + 'px');
+      piece.style.setProperty('--ty', Math.sin(angle) * distance + 'px');
+      piece.style.setProperty('--tr', (Math.random() * 360 - 180) + 'deg');
+      piece.style.background = CONFETTI_COLORS[i % CONFETTI_COLORS.length];
+      piece.style.animationDelay = (Math.random() * 0.15) + 's';
+      intakeConfetti.appendChild(piece);
+    }
+  }
+
+  function openIntakePage(programType) {
+    pendingProgramType = programType;
+    intakeIconEmoji.textContent = PROGRAM_EMOJI[programType] || '✨';
+    const nameKey = PROGRAM_NAME_KEY[programType];
+    const programName = nameKey ? t(nameKey) : '';
+    intakeSubtitle.textContent = t('intakeSubtitle').replace('{program}', programName);
+    const profile = state.profile || {};
+    intakeName.value = profile.name || '';
+    intakeAge.value = profile.age || '';
+    intakeHeight.value = profile.height || '';
+    intakeWeight.value = profile.weight || '';
+    intakeGoal.value = 'maintain';
+    intakeHealth.value = '';
+    intakeNotes.value = '';
+    intakeValidation.classList.remove('visible');
+    intakeForm.hidden = false;
+    intakeSuccess.hidden = true;
+    intakePage.hidden = false;
+    intakePage.classList.remove('is-leaving');
+    intakePage.classList.add('is-entering');
+    intakeIconBadge.style.animation = 'none';
+    void intakeIconBadge.offsetWidth;
+    intakeIconBadge.style.animation = '';
+    intakePage.querySelector('.intake-page-scroll').scrollTop = 0;
+  }
+
+  function closeIntakePage() {
+    if (intakePage.hidden) return;
+    intakePage.classList.remove('is-entering');
+    intakePage.classList.add('is-leaving');
+    const finish = () => { intakePage.hidden = true; intakePage.classList.remove('is-leaving'); };
+    if (prefersReducedMotion) { finish(); return; }
+    intakePage.addEventListener('animationend', finish, { once: true });
+  }
+
   document.querySelectorAll('.program-buy').forEach((btn) => {
-    btn.addEventListener('click', () => showToast(t('programBuyToast')));
+    btn.addEventListener('click', () => {
+      const card = btn.closest('.program-card');
+      const typeClass = card ? Array.from(card.classList).find((c) => c.startsWith('type-')) : null;
+      const programType = typeClass ? typeClass.replace('type-', '') : '';
+      openIntakePage(programType);
+    });
+  });
+
+  intakeBack.addEventListener('click', closeIntakePage);
+  intakeSuccessDone.addEventListener('click', closeIntakePage);
+
+  intakeForm.addEventListener('submit', function (event) {
+    event.preventDefault();
+    const name = intakeName.value.trim();
+    const age = parseInt(intakeAge.value, 10);
+    const height = parseFloat(intakeHeight.value);
+    const weight = parseFloat(intakeWeight.value);
+    if (!name || !Number.isFinite(age) || !Number.isFinite(height) || !Number.isFinite(weight)) {
+      intakeValidation.textContent = t('intakeRequired');
+      intakeValidation.classList.add('visible');
+      return;
+    }
+    intakeValidation.classList.remove('visible');
+
+    const nameKey = PROGRAM_NAME_KEY[pendingProgramType];
+    const programName = nameKey ? t(nameKey) : pendingProgramType;
+    state.intakeRequests.push({
+      id: Date.now() + '-' + Math.random().toString(36).slice(2, 7),
+      programType: pendingProgramType,
+      programName,
+      name, age, height, weight,
+      goal: intakeGoal.value,
+      health: intakeHealth.value.trim(),
+      notes: intakeNotes.value.trim(),
+      date: todayKey()
+    });
+    saveState(state);
+
+    intakeSuccessText.textContent = t('intakeSuccessToast');
+    intakeForm.hidden = true;
+    intakeSuccess.hidden = false;
+    if (!prefersReducedMotion) launchConfetti();
   });
 
   function renderAll() {
