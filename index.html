@@ -3752,7 +3752,8 @@
   .cm-post.open .cm-replies { grid-template-rows: 1fr; }
   .cm-replies-inner { min-height: 0; overflow: hidden; visibility: hidden; opacity: 0; transition: opacity 0.35s var(--ease-out), visibility 0s 0.45s; }
   .cm-post.open .cm-replies-inner { visibility: visible; opacity: 1; transition-delay: 0s; }
-  .cm-reply { display: flex; gap: 10px; padding: 10px 0; border-top: 1px solid var(--line); }
+  .cm-reply { display: flex; gap: 12px; padding: 12px 0 10px 5px; border-top: 1px solid var(--line); }
+  .cm-av-sm.ring::after { inset: -3px; }
   .cm-reply.is-new { animation: cmNew 0.6s var(--spring); }
   .cm-reply-body { min-width: 0; font-size: 13.5px; line-height: 1.45; }
   .cm-reply-body b { font-weight: 800; }
