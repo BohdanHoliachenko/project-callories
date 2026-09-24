@@ -3148,6 +3148,102 @@
     }
     .program-card { transform: none !important; }
   }
+
+  /* ---- idle brand orb (sidebar) ---- */
+  .sidebar-deco {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    padding: 26px 10px 20px;
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+  .orb {
+    position: relative;
+    width: 96px;
+    height: 96px;
+    flex: none;
+    transform: perspective(600px) rotateX(calc(var(--py, 0) * -10deg)) rotateY(calc(var(--px, 0) * 12deg));
+    transition: transform 0.5s var(--ease-out);
+  }
+  .orb-float { position: absolute; inset: 0; animation: orbFloat 6.5s ease-in-out infinite; }
+  .orb-logo { width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 14px 22px rgba(4, 120, 87, 0.45)); }
+  @keyframes orbFloat {
+    0%, 100% { transform: translateY(0) rotate(-2deg) scale(1); }
+    50% { transform: translateY(-7px) rotate(2.5deg) scale(1.035); }
+  }
+  .orb-badge { fill: url(#orbBadgeGrad); animation: badgeBreathe 4.2s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  @keyframes badgeBreathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.045); } }
+  .orb-ring { fill: none; stroke: url(#orbRingGrad); transform-box: fill-box; transform-origin: center; }
+  .orb-ring-a { animation: orbSpin 9s linear infinite; }
+  .orb-ring-b { animation: orbSpin 16s linear infinite reverse; opacity: 0.7; }
+  @keyframes orbSpin { to { transform: rotate(360deg); } }
+  .orb-sheen { animation: orbSheen 5.2s ease-in-out 1s infinite; }
+  @keyframes orbSheen { 0%, 58% { transform: translateX(-30px); } 100% { transform: translateX(110px); } }
+  .orb-leaf { transform-box: fill-box; transform-origin: 50% 90%; animation: leafSway 5s ease-in-out infinite; }
+  @keyframes leafSway { 0%, 100% { transform: rotate(-5deg) scale(1); } 50% { transform: rotate(5deg) scale(1.08); } }
+  .orb-leaf-body { fill: #fff; fill-opacity: 0.97; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.18)); }
+  .orb-vein { fill: none; stroke: #0D9488; stroke-opacity: 0.85; stroke-dasharray: 100; stroke-dashoffset: 0; animation: veinDraw 4.4s ease-in-out infinite; }
+  @keyframes veinDraw { 0% { stroke-dashoffset: 100; } 45%, 80% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -100; } }
+  .orb-halo {
+    position: absolute;
+    inset: 8px;
+    border-radius: 30px;
+    border: 2px solid rgba(16, 185, 129, 0.55);
+    animation: orbHalo 3.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+    pointer-events: none;
+  }
+  .orb-halo-2 { animation-delay: 1.8s; border-color: rgba(251, 146, 60, 0.5); }
+  @keyframes orbHalo { 0% { transform: scale(0.8); opacity: 0.85; } 100% { transform: scale(1.9); opacity: 0; } }
+  .orb-orbit { position: absolute; border-radius: 50%; animation: orbSpin var(--d, 10s) linear infinite; pointer-events: none; }
+  .orb-orbit i { position: absolute; top: -3px; left: 50%; width: 7px; height: 7px; margin-left: -3.5px; border-radius: 50%; background: var(--c); box-shadow: 0 0 10px 2px var(--c); }
+  .orb-orbit-a { inset: -16px; --d: 8s; --c: #FB923C; }
+  .orb-orbit-b { inset: -30px; --d: 13s; --c: #34D399; animation-direction: reverse; }
+  .orb-orbit-c { inset: -44px; --d: 19s; --c: #22D3EE; }
+  .orb-orbit-b i { width: 5px; height: 5px; margin-left: -2.5px; }
+  .orb-orbit-c i { width: 4px; height: 4px; margin-left: -2px; }
+  .orb-spark {
+    position: absolute;
+    width: 12px; height: 12px;
+    background: #fff;
+    clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+    filter: drop-shadow(0 0 4px rgba(251, 146, 60, 0.9));
+    opacity: 0;
+    animation: sparkTwinkle 3.4s ease-in-out infinite;
+    pointer-events: none;
+  }
+  .orb-spark-1 { top: -14px; right: -6px; animation-delay: 0.2s; }
+  .orb-spark-2 { bottom: -10px; left: -14px; animation-delay: 1.1s; width: 9px; height: 9px; }
+  .orb-spark-3 { top: 10px; left: -22px; animation-delay: 2s; width: 8px; height: 8px; }
+  .orb-spark-4 { bottom: 2px; right: -20px; animation-delay: 2.7s; }
+  @keyframes sparkTwinkle {
+    0%, 100% { transform: scale(0) rotate(0deg); opacity: 0; }
+    40% { transform: scale(1.15) rotate(45deg); opacity: 1; }
+    70% { transform: scale(0.6) rotate(90deg); opacity: 0.5; }
+  }
+  .orb-word {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: linear-gradient(100deg, #047857, #0D9488 35%, #EA580C 65%, #047857);
+    background-size: 250% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: wordShimmer 7s linear infinite;
+  }
+  :root[data-theme="dark"] .orb-word { background-image: linear-gradient(100deg, #6EE7B7, #2DD4BF 35%, #FDBA74 65%, #6EE7B7); }
+  @keyframes wordShimmer { to { background-position: -250% 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .orb, .orb-float, .orb-badge, .orb-ring, .orb-sheen, .orb-leaf, .orb-vein, .orb-halo, .orb-orbit, .orb-word { animation: none !important; transition: none !important; }
+    .orb-spark { animation: none !important; opacity: 0.85; transform: scale(0.8); }
+    .orb-halo, .orb-halo-2 { opacity: 0; }
+  }
+  .sidebar-deco::before, .sidebar-deco::after { z-index: 0; }
+  .sidebar-deco > * { position: relative; z-index: 1; }
 </style>
 </head>
 <body>
@@ -3266,10 +3362,44 @@
       <button class="tab-btn" data-tab="profile"><svg class="tab-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg><span class="tab-label" data-i18n="profile">Профіль</span></button>
       <button class="tab-btn" data-tab="programs"><svg class="tab-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.5 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"/></svg><span class="tab-label" data-i18n="programsNav">Програми</span></button>
       <div class="sidebar-deco" aria-hidden="true">
-        <svg class="sidebar-deco-mark" viewBox="0 0 24 24">
-          <path d="M12,5 C17,8 17,16 12,19 C7,16 7,8 12,5 Z"/>
-          <path class="deco-vein" d="M12,8 C10.3,10.5 10.3,13.5 12,16"/>
-        </svg>
+        <div class="orb">
+          <span class="orb-halo"></span>
+          <span class="orb-halo orb-halo-2"></span>
+          <span class="orb-orbit orb-orbit-a"><i></i></span>
+          <span class="orb-orbit orb-orbit-b"><i></i></span>
+          <span class="orb-orbit orb-orbit-c"><i></i></span>
+          <b class="orb-spark orb-spark-1"></b><b class="orb-spark orb-spark-2"></b><b class="orb-spark orb-spark-3"></b><b class="orb-spark orb-spark-4"></b>
+          <div class="orb-float">
+            <svg class="orb-logo" viewBox="0 0 88 88" focusable="false">
+              <defs>
+                <linearGradient id="orbBadgeGrad" x1="16" y1="16" x2="72" y2="72" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#10B981"/>
+                  <stop offset="0.55" stop-color="#0D9488"/>
+                  <stop offset="1" stop-color="#F97316"/>
+                </linearGradient>
+                <linearGradient id="orbRingGrad" x1="4" y1="4" x2="84" y2="84" gradientUnits="userSpaceOnUse">
+                  <stop offset="0" stop-color="#FB923C"/>
+                  <stop offset="1" stop-color="#10B981"/>
+                </linearGradient>
+                <linearGradient id="orbSheenGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+                  <stop offset="0.5" stop-color="#fff" stop-opacity="0.75"/>
+                  <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+                </linearGradient>
+                <clipPath id="orbClip"><rect x="16" y="16" width="56" height="56" rx="18"/></clipPath>
+              </defs>
+              <circle class="orb-ring orb-ring-a" cx="44" cy="44" r="41" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="150 108"/>
+              <circle class="orb-ring orb-ring-b" cx="44" cy="44" r="35" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="4 9"/>
+              <rect class="orb-badge" x="16" y="16" width="56" height="56" rx="18"/>
+              <g clip-path="url(#orbClip)"><g class="orb-sheen"><rect x="-8" y="10" width="20" height="70" transform="rotate(18 44 44)" fill="url(#orbSheenGrad)"/></g></g>
+              <g class="orb-leaf">
+                <path class="orb-leaf-body" d="M44,28 C55,33 56,55 44,60 C32,55 33,33 44,28 Z"/>
+                <path class="orb-vein" d="M44,33 C41,40 41,48 44,55" stroke-width="2" stroke-linecap="round" pathLength="100"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+        <div class="orb-word">TrackTime</div>
       </div>
     </nav>
     <div class="content">
@@ -5476,6 +5606,19 @@
       btn.appendChild(dot);
       dot.addEventListener('animationend', () => dot.remove(), { once: true });
     });
+
+
+    // brand orb: pointer parallax (the idle animation runs regardless)
+    const deco = document.querySelector('.sidebar-deco');
+    const orb = deco && deco.querySelector('.orb');
+    if (orb && !reduce) {
+      deco.addEventListener('pointermove', (e) => {
+        const r = deco.getBoundingClientRect();
+        orb.style.setProperty('--px', (((e.clientX - r.left) / r.width) * 2 - 1).toFixed(2));
+        orb.style.setProperty('--py', (((e.clientY - r.top) / r.height) * 2 - 1).toFixed(2));
+      });
+      deco.addEventListener('pointerleave', () => { orb.style.setProperty('--px', 0); orb.style.setProperty('--py', 0); });
+    }
 
     // pointer-tracked tilt + glow on program cards
     if (!reduce && window.matchMedia('(hover: hover)').matches) {
