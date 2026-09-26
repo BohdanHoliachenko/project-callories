@@ -8,7 +8,8 @@
 <title>TrackTime — облік калорій</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"></noscript>
 <style>
   :root {
     --bg: #EAF7EE;
@@ -3780,6 +3781,107 @@
   }
 
   @media (max-width: 480px) { .tab-btn.active { flex-grow: 2; } }
+
+  /* =====================================================================
+     PERFORMANCE LAYER
+     - no backdrop-filter on cards/list items (the aurora underneath is already
+       soft, so blur was invisible but forced a re-blur every frame)
+     - off-screen idle animations are paused (IntersectionObserver) and skipped
+       entirely with content-visibility
+     - infinite box-shadow pulses replaced by compositor-only transforms
+     - "lite" mode (auto on slow devices, ?lite=1/0) keeps all interactions
+     ===================================================================== */
+  :root { --glass: rgba(255, 255, 255, 0.76); --glass-soft: rgba(255, 255, 255, 0.62); }
+  :root[data-theme="dark"] { --glass: rgba(15, 36, 29, 0.74); --glass-soft: rgba(15, 36, 29, 0.58); }
+  @media (max-width: 859.98px) {
+    :root { --glass: rgba(255, 255, 255, 0.82); --glass-soft: rgba(255, 255, 255, 0.7); }
+    :root[data-theme="dark"] { --glass: rgba(15, 36, 29, 0.84); --glass-soft: rgba(15, 36, 29, 0.68); }
+  }
+  .language-select, .nutrition, .nutrition-dashboard, .leaderboard, .facts, .faq, .training, .profile-settings,
+  .programs, .auth-card, .chart-card, .intake-dialog, .stat-card, .nutrition-card, .profile-metric,
+  ul.entries li, .program-card, .diet-panel, .diet-block, .diet-stat, .goal-card, .diet-empty, .diet-chip,
+  .leaderboard-row, .facts-list li, .tip, .training-item, .add-form input, .add-form select,
+  .training-form select, .training-form input, .training-form textarea, .profile-form input,
+  .dashboard-filters select, .intake-form input, .intake-form select, .intake-form textarea,
+  .auth-form input, .sheets-sync-row input, .cm-composer, .cm-post, .cm-stat, .cm-tag-pick button,
+  .cm-filters button, .cm-reply-form input, .photo-picker, .training-day span {
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+  }
+  .toast { -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .intake-page-scroll { -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+  .program-card { will-change: auto; }
+
+  /* animations that only matter while visible */
+  .is-paused, .is-paused *, .is-paused *::before, .is-paused *::after { animation-play-state: paused !important; }
+  .page-hidden *, .page-hidden *::before, .page-hidden *::after { animation-play-state: paused !important; }
+  .cm-post { content-visibility: auto; contain-intrinsic-size: auto 300px; }
+  .program-card { content-visibility: auto; contain-intrinsic-size: auto 330px; }
+
+  /* box-shadow pulses repaint every frame — use a transformed ring instead */
+  .cw-fab-dot, .cw-online, .cm-live { animation: none; position: relative; }
+  .cw-fab-dot { position: absolute; }
+  .cw-online { position: absolute; }
+  .cw-fab-dot::after, .cw-online::after, .cm-live::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: #22C55E; animation: cwPing 2.4s ease-out infinite; }
+  @keyframes cwPing { 0% { transform: scale(1); opacity: 0.55; } 100% { transform: scale(2.6); opacity: 0; } }
+  .cm-post-btn:not(:disabled) { animation: cmBtnBreath 2.6s ease-in-out infinite; }
+  @keyframes cmBtnBreath { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+  header.top::after { animation: none; }
+
+  /* lite mode: single-pass animations, no blur anywhere */
+  html.lite *, html.lite *::before, html.lite *::after { animation-iteration-count: 1 !important; }
+  html.lite body::before, html.lite body::after { animation: none !important; }
+  html.lite .tabs, html.lite .cw-panel, html.lite .training-confirm-modal, html.lite .profile-modal, html.lite .intake-page-scroll, html.lite .splash-screen {
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+  }
+  html.lite .tabs, html.lite .cw-panel { background: var(--surface); }
+
+  /* fewer main-thread SVG animations: merged / dropped where the difference is barely visible */
+  .d-shadow, .d-knife, .d-w, .d-steam path { animation: none; }
+  .d-wedges { transform-origin: 130px 92px; animation: wedgeBreath 4.8s ease-in-out infinite; }
+  @keyframes wedgeBreath { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.035) rotate(2deg); } }
+  .d-steam { animation: steamUp 3.6s ease-in-out infinite; }
+  .d-steam path { stroke-dasharray: none; }
+  @keyframes steamUp { 0% { opacity: 0; transform: translateY(10px); } 40% { opacity: 0.9; } 100% { opacity: 0; transform: translateY(-12px); } }
+  .d-sp { animation: none; opacity: 1; }
+  .d-sps { animation: sparkGroup 3.2s ease-in-out infinite; }
+  @keyframes sparkGroup { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
+  .cmh-b2, .cmh-sp2, .cmh-sp { animation: none; }
+  .cmh-sp { opacity: 0.85; }
+  .cmh-sp1 { animation: sparkTwinkle 3.2s ease-in-out infinite; opacity: 0; }
+  .cw-typing { position: absolute; left: 50%; top: 47%; display: flex; gap: 1.1px; transform: translate(-50%, -50%); }
+  .cw-typing i { width: 2.7px; height: 2.7px; border-radius: 50%; background: currentColor; animation: cwDot 1.8s ease-in-out infinite; }
+  .cw-typing i:nth-child(2) { animation-delay: 0.15s; }
+  .cw-typing i:nth-child(3) { animation-delay: 0.3s; }
+
+  /* =====================================================================
+     iPHONE / TOUCH SPEED
+     - no 300ms tap delay, no grey tap flash
+     - aurora: gradients are already soft, so drop the blur + drift and the oversized layers
+     - bottom nav: a fixed blurred bar is re-blurred on every scroll frame in Safari
+     - sections appear at once (one short fade) instead of a staggered rise
+     ===================================================================== */
+  html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+  a, button, select, label, summary, [role="button"], [role="switch"], input[type="checkbox"], input[type="file"] { touch-action: manipulation; }
+  .view { overscroll-behavior-y: contain; }
+  @keyframes viewFade { from { opacity: 0; } to { opacity: 1; } }
+  @media (max-width: 859.98px), (pointer: coarse) {
+    body::before, body::after {
+      top: -6%; left: -6%; right: -6%; bottom: -6%;
+      filter: none;
+      animation: none;
+      will-change: auto;
+    }
+    .tabs {
+      -webkit-backdrop-filter: none; backdrop-filter: none;
+      background: color-mix(in srgb, var(--surface) 94%, transparent);
+      box-shadow: 0 8px 22px -8px rgba(4, 60, 45, 0.32);
+    }
+    .view.active > *:not([hidden]):not(.profile-modal) {
+      animation: viewFade 0.16s ease-out backwards;
+      animation-delay: 0s !important;
+    }
+    .program-card, .cm-post, .stat-card, .nutrition-card, ul.entries li { box-shadow: 0 2px 8px -2px rgba(4, 60, 45, 0.16); }
+  }
 </style>
 </head>
 <body>
@@ -4321,9 +4423,11 @@
               <circle cx="130" cy="92" r="66" fill="none" stroke="rgba(255,255,255,.95)" stroke-width="3"/>
               <circle cx="130" cy="92" r="52" fill="#fff" fill-opacity=".85"/>
               <circle class="d-plate-ring" cx="130" cy="92" r="58" fill="none" stroke="#10B981" stroke-opacity=".55" stroke-width="1.5" stroke-dasharray="3 7"/>
+              <g class="d-wedges">
               <path class="d-w d-w1" d="M130 92 L130 52 A40 40 0 0 1 164.64 112 Z" fill="url(#dProt)"/>
               <path class="d-w d-w2" d="M130 92 L164.64 112 A40 40 0 0 1 95.36 112 Z" fill="url(#dCarb)"/>
               <path class="d-w d-w3" d="M130 92 L95.36 112 A40 40 0 0 1 130 52 Z" fill="url(#dVeg)"/>
+              </g>
               <circle cx="130" cy="92" r="8" fill="#fff"/>
             </g>
             <g class="d-fork" fill="none" stroke="#D1FAE5" stroke-width="4" stroke-linecap="round">
@@ -4341,9 +4445,11 @@
               <path d="M46 132c14-4 24 4 24 16-14 2-24-4-24-16z" fill="#10B981"/>
               <path d="M48 134c8 2 14 6 20 12" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>
             </g>
+            <g class="d-sps">
             <path class="d-sp d-sp1" d="M236 34l2.6 6.4 6.4 2.6-6.4 2.6-2.6 6.4-2.6-6.4-6.4-2.6 6.4-2.6z"/>
             <path class="d-sp d-sp2" d="M22 30l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/>
             <path class="d-sp d-sp3" d="M242 96l1.8 4.4 4.4 1.8-4.4 1.8-1.8 4.4-1.8-4.4-4.4-1.8 4.4-1.8z"/>
+            </g>
           </svg>
         </div>
       </section>
@@ -4575,7 +4681,8 @@
     <span class="cw-fab-ring" aria-hidden="true"></span>
     <span class="cw-fab-ring cw-fab-ring2" aria-hidden="true"></span>
     <span class="cw-fab-ic cw-ic-chat" aria-hidden="true">
-      <svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/><circle class="cw-d" cx="8.5" cy="11.5" r="1.2"/><circle class="cw-d" cx="12" cy="11.5" r="1.2"/><circle class="cw-d" cx="15.5" cy="11.5" r="1.2"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/></svg>
+      <span class="cw-typing"><i></i><i></i><i></i></span>
     </span>
     <span class="cw-fab-ic cw-ic-close" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></span>
     <span class="cw-fab-dot" aria-hidden="true"></span>
@@ -6355,11 +6462,45 @@
     renderWeek();
     renderLeaderboard();
     renderNutrition();
-    renderTraining();
     renderProfile();
-    renderDiet();
-    renderCommunity();
+    // heavy / rarely visible views render only when shown (tab open re-renders them anyway)
+    if (views.training.classList.contains('active')) renderTraining();
+    if (views.diet.classList.contains('active')) renderDiet();
+    if (views.community.classList.contains('active')) renderCommunity();
     if (!chatPanel.hidden && !chatPanel.classList.contains('is-closing')) { chatChips.innerHTML = ''; renderChat(''); }
+  }
+
+  // Downscale uploads before they go into localStorage: a phone photo as raw base64 makes every save/load parse MBs.
+  function readImageCompact(file, maxSide, fallback) {
+    const readRaw = () => new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => resolve(fallback);
+      reader.readAsDataURL(file);
+    });
+    return new Promise((resolve) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const scale = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
+          const w = Math.max(1, Math.round(img.naturalWidth * scale));
+          const h = Math.max(1, Math.round(img.naturalHeight * scale));
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          const out = canvas.toDataURL('image/jpeg', 0.78);
+          URL.revokeObjectURL(url);
+          resolve(out && out.length > 32 ? out : fallback);
+        } catch (e) {
+          URL.revokeObjectURL(url);
+          readRaw().then(resolve);
+        }
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); readRaw().then(resolve); };
+      img.src = url;
+    });
   }
 
   addForm.addEventListener('submit', async function (ev) {
@@ -6372,12 +6513,7 @@
 
     let photo = '';
     if (foodPhoto.files[0]) {
-      photo = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = () => resolve('');
-        reader.readAsDataURL(foodPhoto.files[0]);
-      });
+      photo = await readImageCompact(foodPhoto.files[0], 640, '');
     }
 
     const key = todayKey();
@@ -6639,12 +6775,7 @@
     event.preventDefault();
     let avatar = state.profile.avatar || '';
     if (profileAvatarInput.files[0]) {
-      avatar = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = () => resolve(avatar);
-        reader.readAsDataURL(profileAvatarInput.files[0]);
-      });
+      avatar = await readImageCompact(profileAvatarInput.files[0], 320, avatar);
     }
     state.profile = {
       name: profileName.value.trim(),
@@ -6663,9 +6794,16 @@
 
   function showMainTab(tab) {
     tabBtns.forEach((btn) => btn.classList.toggle('active', btn.dataset.tab === tab));
-    if (tab === 'diet') { renderDiet(); settleDiet(); }
-    if (tab === 'community') { renderCommunity(); settleCommunity(); }
     Object.entries(views).forEach(([key, view]) => view.classList.toggle('active', key === tab));
+    // Heavy views build after the tab has painted, so the tap feels instant instead of waiting on the DOM work.
+    if (tab === 'training' || tab === 'diet' || tab === 'community') {
+      requestAnimationFrame(() => {
+        if (!views[tab].classList.contains('active')) return;
+        if (tab === 'training') renderTraining();
+        if (tab === 'diet') { renderDiet(); settleDiet(); }
+        if (tab === 'community') { renderCommunity(); settleCommunity(); }
+      });
+    }
   }
 
   tabBtns.forEach((btn) => {
@@ -6985,26 +7123,85 @@
     const deco = document.querySelector('.sidebar-deco');
     const orb = deco && deco.querySelector('.orb');
     if (orb && !reduce) {
+      let orbRaf = 0;
       deco.addEventListener('pointermove', (e) => {
-        const r = deco.getBoundingClientRect();
-        orb.style.setProperty('--px', (((e.clientX - r.left) / r.width) * 2 - 1).toFixed(2));
-        orb.style.setProperty('--py', (((e.clientY - r.top) / r.height) * 2 - 1).toFixed(2));
-      });
+        if (orbRaf) return;
+        const cx = e.clientX, cy = e.clientY;
+        orbRaf = requestAnimationFrame(() => {
+          orbRaf = 0;
+          const r = deco.getBoundingClientRect();
+          orb.style.setProperty('--px', (((cx - r.left) / r.width) * 2 - 1).toFixed(2));
+          orb.style.setProperty('--py', (((cy - r.top) / r.height) * 2 - 1).toFixed(2));
+        });
+      }, { passive: true });
       deco.addEventListener('pointerleave', () => { orb.style.setProperty('--px', 0); orb.style.setProperty('--py', 0); });
+    }
+
+
+    // ---- performance: pause idle animations off-screen / in background tabs, adaptive "lite" mode ----
+    const IDLE_SEL = '.diet-hero, .diet-stat, .goal-card, .diet-macros, .diet-empty, .tips, .cm-hero, .cm-post, .sidebar-deco, .program-card, .hero, .cw-panel';
+    if ('IntersectionObserver' in window) {
+      const idleIO = new IntersectionObserver((entries) => {
+        entries.forEach((en) => en.target.classList.toggle('is-paused', !en.isIntersecting));
+      }, { rootMargin: '120px 0px' });
+      const watch = (root) => root.querySelectorAll(IDLE_SEL).forEach((el) => { if (!el.__idleWatched) { el.__idleWatched = true; idleIO.observe(el); } });
+      watch(document);
+      // views re-render via innerHTML — pick up new nodes as they appear
+      [document.getElementById('cmFeed'), document.getElementById('dietRoot')].forEach((host) => {
+        if (host) new MutationObserver(() => watch(host)).observe(host, { childList: true });
+      });
+    }
+    document.addEventListener('visibilitychange', () => document.documentElement.classList.toggle('page-hidden', document.hidden));
+
+    const LITE_KEY = 'tracktime-lite';
+    const root = document.documentElement;
+    let liteStored = null;
+    try {
+      const q = new URLSearchParams(location.search).get('lite');
+      if (q === '1' || q === '0') localStorage.setItem(LITE_KEY, q);
+      liteStored = localStorage.getItem(LITE_KEY);
+    } catch (e) { /* storage unavailable */ }
+    const saveData = !!(navigator.connection && navigator.connection.saveData);
+    const lowMem = typeof navigator.deviceMemory === 'number' && navigator.deviceMemory <= 2;
+    if (liteStored === '1' || (liteStored !== '0' && (saveData || lowMem))) root.classList.add('lite');
+    if (liteStored !== '0' && !root.classList.contains('lite') && !reduce) {
+      // frame-time watchdog: if the device cannot hold ~40fps for a sustained window, switch to lite for good
+      let frames = [], last = 0, bad = 0, sampled = 0;
+      const tick = (now) => {
+        if (last) frames.push(now - last);
+        last = now;
+        if (frames.length >= 90) {
+          frames.sort((a, b) => a - b);
+          const p50 = frames[Math.floor(frames.length / 2)];
+          frames = [];
+          sampled++;
+          bad = p50 > 28 ? bad + 1 : 0;
+          if (bad >= 2) { root.classList.add('lite'); try { localStorage.setItem(LITE_KEY, '1'); } catch (e) { /* ignore */ } return; }
+          if (sampled >= 4) return;
+        }
+        if (!document.hidden) requestAnimationFrame(tick); else { last = 0; setTimeout(() => requestAnimationFrame(tick), 500); }
+      };
+      setTimeout(() => requestAnimationFrame(tick), 2500);
     }
 
     // pointer-tracked tilt + glow on program cards
     if (!reduce && window.matchMedia('(hover: hover)').matches) {
       document.querySelectorAll('.program-card').forEach((card) => {
+        let cardRaf = 0;
         card.addEventListener('pointermove', (e) => {
-          const r = card.getBoundingClientRect();
-          const px = (e.clientX - r.left) / r.width;
-          const py = (e.clientY - r.top) / r.height;
-          card.style.setProperty('--ry', ((px - 0.5) * 8).toFixed(2) + 'deg');
-          card.style.setProperty('--rx', ((0.5 - py) * 8).toFixed(2) + 'deg');
-          card.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
-          card.style.setProperty('--my', (py * 100).toFixed(1) + '%');
-        });
+          if (cardRaf) return;
+          const cx = e.clientX, cy = e.clientY;
+          cardRaf = requestAnimationFrame(() => {
+            cardRaf = 0;
+            const r = card.getBoundingClientRect();
+            const px = (cx - r.left) / r.width;
+            const py = (cy - r.top) / r.height;
+            card.style.setProperty('--ry', ((px - 0.5) * 8).toFixed(2) + 'deg');
+            card.style.setProperty('--rx', ((0.5 - py) * 8).toFixed(2) + 'deg');
+            card.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
+            card.style.setProperty('--my', (py * 100).toFixed(1) + '%');
+          });
+        }, { passive: true });
         card.addEventListener('pointerleave', () => {
           card.style.setProperty('--rx', '0deg');
           card.style.setProperty('--ry', '0deg');
