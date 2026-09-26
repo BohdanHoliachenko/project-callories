@@ -3853,6 +3853,27 @@
   .cw-typing i:nth-child(2) { animation-delay: 0.15s; }
   .cw-typing i:nth-child(3) { animation-delay: 0.3s; }
 
+  /* purchase details page must fully cover the page underneath (no see-through / blur of the shop behind it) */
+  /* same aurora gradients as the rest of the platform, painted on top of a solid base so nothing shows through */
+  .intake-page {
+    background:
+      radial-gradient(38% 34% at 18% 22%, rgba(16, 185, 129, 0.55), transparent 70%),
+      radial-gradient(34% 32% at 82% 14%, rgba(6, 182, 212, 0.42), transparent 70%),
+      radial-gradient(36% 38% at 72% 84%, rgba(251, 146, 60, 0.34), transparent 70%),
+      radial-gradient(34% 34% at 12% 82%, rgba(163, 230, 53, 0.34), transparent 70%),
+      var(--bg);
+  }
+  :root[data-theme="dark"] .intake-page {
+    background:
+      radial-gradient(38% 34% at 18% 22%, rgba(16, 185, 129, 0.3), transparent 70%),
+      radial-gradient(34% 32% at 82% 14%, rgba(6, 182, 212, 0.23), transparent 70%),
+      radial-gradient(36% 38% at 72% 84%, rgba(251, 146, 60, 0.19), transparent 70%),
+      radial-gradient(34% 34% at 12% 82%, rgba(163, 230, 53, 0.19), transparent 70%),
+      var(--bg);
+  }
+  .intake-page-scroll { background: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  @media (max-width: 859.98px), (pointer: coarse) { .intake-blob { display: none; } }
+
   /* =====================================================================
      iPHONE / TOUCH SPEED
      - no 300ms tap delay, no grey tap flash
