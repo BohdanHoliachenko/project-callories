@@ -3876,10 +3876,14 @@
       background: color-mix(in srgb, var(--surface) 94%, transparent);
       box-shadow: 0 8px 22px -8px rgba(4, 60, 45, 0.32);
     }
-    .view.active > *:not([hidden]):not(.profile-modal) {
-      animation: viewFade 0.16s ease-out backwards;
-      animation-delay: 0s !important;
-    }
+    /* one opacity fade on the whole section: per-block staggered rises made Safari promote dozens of layers */
+    .view.active { animation: viewFade 0.14s ease-out; }
+    .view.active > *:not([hidden]):not(.profile-modal) { animation: none; }
+    /* animating flex-grow re-lays-out the nav every frame; snap the width, animate only transform/opacity */
+    .tab-btn { transition: color var(--t-med) var(--ease-out), transform var(--t-fast) var(--ease-out); }
+    .tab-btn.active .tab-label { animation: viewFade 0.22s ease-out; }
+    .tab-btn.active .tab-ic { animation: tabPopLite 0.3s ease-out; }
+    @keyframes tabPopLite { 0% { transform: scale(0.8); } 100% { transform: scale(1.08); } }
     .program-card, .cm-post, .stat-card, .nutrition-card, ul.entries li { box-shadow: 0 2px 8px -2px rgba(4, 60, 45, 0.16); }
   }
 </style>
@@ -6794,17 +6798,19 @@
 
   function showMainTab(tab) {
     tabBtns.forEach((btn) => btn.classList.toggle('active', btn.dataset.tab === tab));
-    Object.entries(views).forEach(([key, view]) => view.classList.toggle('active', key === tab));
-    // Heavy views build after the tab has painted, so the tap feels instant instead of waiting on the DOM work.
-    if (tab === 'training' || tab === 'diet' || tab === 'community') {
-      requestAnimationFrame(() => {
-        if (!views[tab].classList.contains('active')) return;
-        if (tab === 'training') renderTraining();
-        if (tab === 'diet') { renderDiet(); settleDiet(); }
-        if (tab === 'community') { renderCommunity(); settleCommunity(); }
-      });
-    }
+    const token = ++tabSwitchToken;
+    const swap = () => {
+      if (token !== tabSwitchToken) return;
+      Object.entries(views).forEach(([key, view]) => view.classList.toggle('active', key === tab));
+      // Build heavy views in the same frame the section is revealed, so nothing pops in during the fade.
+      if (tab === 'training') renderTraining();
+      if (tab === 'diet') { renderDiet(); settleDiet(); }
+      if (tab === 'community') { renderCommunity(); settleCommunity(); }
+    };
+    if (tab === 'training' || tab === 'diet' || tab === 'community') requestAnimationFrame(swap);
+    else swap();
   }
+  let tabSwitchToken = 0;
 
   tabBtns.forEach((btn) => {
     btn.addEventListener('click', () => showMainTab(btn.dataset.tab));
