@@ -3853,6 +3853,24 @@
   .cw-typing i:nth-child(2) { animation-delay: 0.15s; }
   .cw-typing i:nth-child(3) { animation-delay: 0.3s; }
 
+  /* phones/tablets: chat is a full-screen sheet sized to the visible viewport (keyboard-safe), not a floating card */
+  @media (max-width: 859.98px) {
+    .cw-panel {
+      left: 0; right: 0; top: var(--vv-top, 0px); bottom: auto;
+      width: 100%; max-width: none;
+      height: var(--vv-h, 100dvh); min-height: 0; max-height: none;
+      border-radius: 0; border-width: 0;
+      transform-origin: 50% 100%;
+    }
+    :root:not([data-theme="dark"]) .cw-panel, :root[data-theme="dark"] .cw-panel {
+      background: var(--surface);
+      -webkit-backdrop-filter: none; backdrop-filter: none;
+    }
+    .cw-head { padding-top: calc(14px + env(safe-area-inset-top, 0px)); }
+    .cw-form { padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
+    #chatFab.is-open { display: none; }
+  }
+
   /* purchase details page must fully cover the page underneath (no see-through / blur of the shop behind it) */
   /* same aurora gradients as the rest of the platform, painted on top of a solid base so nothing shows through */
   .intake-page {
@@ -3882,6 +3900,10 @@
      - sections appear at once (one short fade) instead of a staggered rise
      ===================================================================== */
   html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+  /* overlay open (chat, purchase form, modals, splash): freeze the page behind it (iOS ignores overflow:hidden alone) */
+  html.scroll-locked { overflow: hidden; }
+  html.scroll-locked body { position: fixed; left: 0; right: 0; width: 100%; overflow: hidden; }
+  .intake-page-scroll, .cw-panel, .profile-dialog, .training-confirm-dialog { overscroll-behavior: contain; }
   a, button, select, label, summary, [role="button"], [role="switch"], input[type="checkbox"], input[type="file"] { touch-action: manipulation; }
   .view { overscroll-behavior-y: contain; }
   @keyframes viewFade { from { opacity: 0; } to { opacity: 1; } }
@@ -5790,7 +5812,10 @@
     }
     renderChat(prefersReducedMotion ? '' : 'open');
     syncChatComposer();
-    setTimeout(() => { if (!chatPanel.hidden && !chatPanel.classList.contains('is-closing')) chatInput.focus({ preventScroll: true }); }, prefersReducedMotion ? 0 : 420);
+    // On phones an auto-focus pops the keyboard over half the chat; let the user tap the field instead.
+    if (!window.matchMedia('(max-width: 859.98px)').matches) {
+      setTimeout(() => { if (!chatPanel.hidden && !chatPanel.classList.contains('is-closing')) chatInput.focus({ preventScroll: true }); }, prefersReducedMotion ? 0 : 420);
+    }
   }
 
   function closeChat() {
@@ -7082,9 +7107,50 @@
     if (ok) renderAll();
   });
 
+  // ---- scroll lock: while any overlay is on top, the page underneath must not scroll ----
+  let scrollLocked = false;
+  let scrollLockY = 0;
+  function overlayIsOpen() {
+    return (!chatPanel.hidden && !chatPanel.classList.contains('is-closing'))
+      || !intakePage.hidden || !profileModal.hidden || !trainingConfirmModal.hidden || !splashScreen.hidden;
+  }
+  function syncScrollLock() {
+    const need = overlayIsOpen();
+    if (need === scrollLocked) return;
+    scrollLocked = need;
+    const root = document.documentElement;
+    if (need) {
+      scrollLockY = window.pageYOffset || root.scrollTop || 0;
+      document.body.style.top = (-scrollLockY) + 'px';
+      root.classList.add('scroll-locked');
+    } else {
+      root.classList.remove('scroll-locked');
+      document.body.style.top = '';
+      window.scrollTo({ top: scrollLockY, left: 0, behavior: 'instant' });
+    }
+  }
+  // Track the *visible* area (iOS keeps the layout viewport under the keyboard) so the full-screen chat never hides behind it.
+  if (window.visualViewport) {
+    const vv = window.visualViewport;
+    const syncVisualViewport = () => {
+      const rootStyle = document.documentElement.style;
+      rootStyle.setProperty('--vv-h', vv.height + 'px');
+      rootStyle.setProperty('--vv-top', vv.offsetTop + 'px');
+      if (!chatPanel.hidden && !chatPanel.classList.contains('is-closing')) chatMessages.scrollTop = chatMessages.scrollHeight;
+    };
+    vv.addEventListener('resize', syncVisualViewport);
+    vv.addEventListener('scroll', syncVisualViewport);
+    syncVisualViewport();
+  }
+  const scrollLockObserver = new MutationObserver(syncScrollLock);
+  [chatPanel, intakePage, profileModal, trainingConfirmModal, splashScreen].forEach((el) => {
+    scrollLockObserver.observe(el, { attributes: true, attributeFilter: ['hidden', 'class'] });
+  });
+
   showMainTab('dashboard');
   renderAll();
   updateAuthVisibility();
+  syncScrollLock();
   if (auth.session && sheetsUrl) {
     pullFromSheets().then((ok) => { if (ok) renderAll(); });
   }
